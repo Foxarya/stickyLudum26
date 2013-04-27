@@ -16,9 +16,8 @@ var capa = new Kinetic.Layer();
 
 $(document).ready(function () {
 	
-	
-	
 	escenario.add(capa);
+	cargarImagenes();
 	
 });
 
@@ -28,7 +27,6 @@ function cargarImagenes() {
 		url : "images.xml",
 		dataType : "xml",
 		success : function(xml) {
-			debug("hola");
 			var compruebaCargadas;
 			var numeroImagenes = $(xml).find('imagen').length;
 			$(xml).find('imagen').each(function() {
@@ -47,5 +45,8 @@ function cargarImagenes() {
 			});
 		}
 	});
+}
 
+function logicaJuego(){
+	
 }
