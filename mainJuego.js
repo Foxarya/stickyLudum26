@@ -83,8 +83,8 @@ function Personaje(x, y, imagen) {
 		idle : [{
 			x : 5,
 			y : 0,
-			width : 55,
-			height : 120
+			width : 50,
+			height : 90
 		}],
 		stat : [{
 			x : 230,
