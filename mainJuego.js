@@ -1,3 +1,4 @@
+var dictImg;
 
 var escenario = new Kinetic.Stage({
 	container : 'container',
@@ -38,7 +39,7 @@ function cargarImagenes() {
 					
 					compruebaCargadas += ".";
 					if (compruebaCargadas.length == numeroImagenes) {
-						//logicaJuego();
+						logicaJuego();
 					}
 				};	
 				imagen.src = "img/" + nombreImagen + ".png";	
@@ -47,33 +48,60 @@ function cargarImagenes() {
 	});
 }
 
-function logicaJuego(){
+function logicaJuego(){	
+      var prota = new Personaje(50,50,dictImg['Sticky']);
+}
+
+function Personaje(x,y,imagen){
+	this.x = x;
+	this.y = y;
+	var image = new Image();
+	image.src = imagen;
+	capa.add(image);
+	var animations = {
+        idle: [{
+        	x: 10,
+        	y: 5,
+        	width: 130,
+        	height: 285
+        }],
+        stat: [{
+        	x: 230,
+        	y: 5,
+        	width: 130,
+        	height: 285,
+        }],
+        punch: [{
+        	x: 330,
+        	y: 5,
+        	width: 200,
+        	height: 285
+        }],
+        jump: [{
+        	x: 10,
+        	y: 325,
+        	width: 130,
+        	height: 265,
+        },{
+        	x: 230,
+        	y: 300,
+        	width: 130,
+        	height: 285,
+    	}]
+    };
+	var blob = new Kinetic.Sprite({
+          x: 250,
+          y: 40,
+          image: imageObj,
+          animation: 'idle',
+          animations: animations,
+          frameRate: 7,
+          index: 0
+        });
+        blob.start();
+}
+
+Personaje.prototype.mover = function(){
 	
 }
 
-var animations = {
-        idle: [{
-        	x: 2,
-        	y: 2,
-        	width: 70,
-        	height: 119
-        }],
-        stat: [{
-        	x: 2,
-        	y: 2,
-        	width: 2,
-        	height:2 ,
-        }],
-        punch: [{
-        	x: 2,
-        	y: 138,
-        	width: 74,
-        	height: 122
-        }],
-        jump: [{
-        	x: 2,
-        	y: 2,
-        	width: 2,
-        	height: 2,
-        }]
-      };
