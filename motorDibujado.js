@@ -1,40 +1,23 @@
-var escenario = new Kinetic.Stage({
-	container : 'container',
-	width : 900,
-	height : 575,
-	draggable : true,
-	dragBoundFunc : function(pos) {
-		return {
-			x : this.getAbsolutePosition().x,
-			y : this.getAbsolutePosition().y
-		}
-	}
-});
-
-var capa = new Kinetic.Layer();
-
-var debugging = 0;
-
 
 
 var puntosDestino = [{
 	x : 73,
-	y : 160
+	y : 400
 }, {
 	x : 300,
-	y : 160
+	y : 400
 },
 {
 	x: 350,
-	y: 100
+	y: 400
 },
 {
 	x: 400,
-	y: 90
+	y: 390
 },
 {
 	x: 800,
-	y: 130
+	y: 400
 }];
 
 var vertices = [];
@@ -69,11 +52,11 @@ function mover(elemento) {
 }
 
 
-$(document).ready(function() {
+function dibujarMapa() {
 
 	var verticeA = new Kinetic.Circle({
-		x : 73,
-		y : 160,
+		x : puntosDestino[0].x,
+		y : puntosDestino[0].y,
 		radius : 10,
 		opacity: debugging,
 		fill : 'red',
@@ -82,8 +65,8 @@ $(document).ready(function() {
 	});
 
 	var verticeB = new Kinetic.Circle({
-		x : 73,
-		y : 160,
+		x : puntosDestino[0].x,
+		y : puntosDestino[0].y,
 		radius : 10,
 		opacity: debugging,
 		fill : 'red',
@@ -131,4 +114,4 @@ $(document).ready(function() {
 	
 	mover(verticeB);
 
-});
+};

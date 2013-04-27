@@ -13,7 +13,11 @@ var escenario = new Kinetic.Stage({
 	}
 });
 
+var debugging = 1;
+
 var capa = new Kinetic.Layer();
+
+var prota;
 
 $(document).ready(function() {
 
@@ -59,6 +63,7 @@ function cargarImagenes() {
 					if (cargadas == numeroImagenes) {
 						barraCarga.destroy();
 						logicaJuego();
+						dibujarMapa();
 					}
 				};
 
@@ -70,32 +75,33 @@ function cargarImagenes() {
 }
 
 function logicaJuego() {
-	var prota = new Personaje(50, 50, dictImg['Sticky']);
+	prota = new Personaje(90, 310, dictImg['Sticky']);
 	capa.add(prota);
 	prota.setId("#prota");
 	$('#container').attr('tabindex', 0);
 	$('#container').keydown(function(e) {
 		if (e.keyCode == 39) {
-			prota.setAnimation("idler");
+			prota.setAnimation("walkr");
 			prota.transitionTo({
 				x : prota.getX() + 40,
 				duration : 0.3,
-				easing : 'ease-out',
+				easing : 'linear',
 				//callback : function() {
-				//	prota.setAnimation("statr");
+				//	prota.setAnimation("idler");
 				//}
-			});			
+			});
+			
 		}
 		if (e.keyCode == 37) {
-			prota.setAnimation("idlel");
+			prota.setAnimation("walkl");
 			prota.transitionTo({
 				x : prota.getX() - 40,
 				duration : 0.3,
-				easing : 'ease-out',
+				easing : 'linear',
 				//callback : function() {
-				//	prota.setAnimation("statl");
+				//	prota.setAnimation("idlel");
 				//}
-			});			
+			});
 		}
 		e.preventDefault();
 		// to stop the key events from bubbling up
@@ -104,18 +110,18 @@ function logicaJuego() {
 		if (e.keyCode == 39) {
 			prota.transitionTo({
 				x : prota.getX() + 5,
-				duration : 0.3,
+				duration : 0.1,
 				easing : 'ease-out'
 			});
-			prota.setAnimation("statr");
+			prota.setAnimation("idler");
 		}
 		if (e.keyCode == 37) {
 			prota.transitionTo({
 				x : prota.getX() - 5,
-				duration : 0.3,
+				duration : 0.1,
 				easing : 'ease-out'
 			});
-			prota.setAnimation("statl");
+			prota.setAnimation("idlel");
 		}
 		e.preventDefault();
 		// to stop the key events from bubbling up
@@ -129,13 +135,13 @@ function Personaje(x, y, imagen) {
 	this.x = x;
 	this.y = y;
 	var animations = {
-		idler : [{
+		walkr : [{
 			x : 0,
 			y : 0,
 			width : 50,
 			height : 90
 		}],
-		statr : [{
+		idler : [{
 			x : 50,
 			y : 0,
 			width : 40,
@@ -158,13 +164,13 @@ function Personaje(x, y, imagen) {
 			width : 50,
 			height : 100,
 		}],
-		idlel : [{
+		walkl : [{
 			x : 245,
 			y : 0,
 			width : 45,
 			height : 90
 		}],
-		statl : [{
+		idlel : [{
 			x : 200,
 			y : 0,
 			width : 45,
@@ -189,10 +195,10 @@ function Personaje(x, y, imagen) {
 		}],
 	};
 	var blob = new Kinetic.Sprite({
-		x : 250,
-		y : 40,
+		x : x,
+		y : y,
 		image : imagen,
-		animation : 'statr',
+		animation : 'idler',
 		animations : animations,
 		frameRate : 7,
 		index : 0
