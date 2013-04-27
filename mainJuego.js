@@ -32,7 +32,7 @@ function cargarImagenes() {
 		strokeWidth : 2,
 		fill : 'orange'
 	});
-	
+
 	capa.add(barraCarga);
 
 	$.ajax({
@@ -72,6 +72,39 @@ function cargarImagenes() {
 function logicaJuego() {
 	var prota = new Personaje(50, 50, dictImg['Sticky']);
 	capa.add(prota);
+	prota.setId("#prota");
+	$('#container').attr('tabindex', 0);
+	$('#container').keydown(function(e) {
+		if (e.keyCode == 39) {
+			prota.transitionTo({
+				x : prota.getX() + 40,				
+				duration : 0.3,
+				easing : 'ease-out'
+			});
+			prota.setAnimation("idler");
+		}
+		if (e.keyCode == 37) {
+			prota.transitionTo({
+				x : prota.getX() - 40,				
+				duration : 0.8,
+				easing : 'ease-out'
+			});
+			prota.setAnimation("idlel");
+		}
+		e.preventDefault();
+		// to stop the key events from bubbling up
+	});
+	$('#container').keyup(function(e) {
+		if (e.keyCode == 39) {			
+			prota.setAnimation("statr");
+		}
+		if (e.keyCode == 37) {			
+			prota.setAnimation("statl");
+		}
+		e.preventDefault();
+		// to stop the key events from bubbling up
+	});
+
 	capa.draw();
 	prota.start();
 }
@@ -80,48 +113,75 @@ function Personaje(x, y, imagen) {
 	this.x = x;
 	this.y = y;
 	var animations = {
-		idle : [{
-			x : 5,
+		idler : [{
+			x : 0,
 			y : 0,
 			width : 50,
 			height : 90
 		}],
-		stat : [{
-			x : 230,
-			y : 5,
-			width : 130,
-			height : 285,
+		statr : [{
+			x : 50,
+			y : 0,
+			width : 40,
+			height : 85
 		}],
-		punch : [{
-			x : 330,
-			y : 5,
-			width : 200,
-			height : 285
+		punchr : [{
+			x : 100,
+			y : 0,
+			width : 140,
+			height : 85
 		}],
-		jump : [{
-			x : 10,
-			y : 325,
-			width : 130,
-			height : 265,
+		jumpr : [{
+			x : 5,
+			y : 100,
+			width : 40,
+			height : 80,
 		}, {
-			x : 230,
-			y : 300,
-			width : 130,
-			height : 285,
-		}]
+			x : 50,
+			y : 80,
+			width : 50,
+			height : 100,
+		}],
+		idlel : [{			
+			x : 245,
+			y : 0,
+			width : 45,
+			height : 90
+		}],
+		statl : [{
+			x : 200,
+			y : 0,
+			width : 45,
+			height : 90
+		}],
+		punchl : [{
+			x : 150,
+			y : 0,
+			width : 140,
+			height : 85
+		}],
+		jumpl : [{
+			x : 245,
+			y : 100,
+			width : 40,
+			height : 80,
+		}, {
+			x : 195,
+			y : 80,
+			width : 50,
+			height : 100,
+		}],
 	};
 	var blob = new Kinetic.Sprite({
 		x : 250,
 		y : 40,
 		image : imagen,
-		animation : 'idle',
+		animation : 'statr',
 		animations : animations,
 		frameRate : 7,
 		index : 0
 	});
 	return blob;
-	
 
 }
-
 
