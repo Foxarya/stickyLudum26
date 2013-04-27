@@ -78,10 +78,10 @@ function logicaJuego() {
 		if (e.keyCode == 39) {
 			prota.transitionTo({
 				x : prota.getX() + 40,				
-				duration : 0.8,
+				duration : 0.3,
 				easing : 'ease-out'
 			});
-
+			prota.setAnimation("idler");
 		}
 		if (e.keyCode == 37) {
 			prota.transitionTo({
@@ -89,7 +89,17 @@ function logicaJuego() {
 				duration : 0.8,
 				easing : 'ease-out'
 			});
-
+			prota.setAnimation("idlel");
+		}
+		e.preventDefault();
+		// to stop the key events from bubbling up
+	});
+	$('#container').keyup(function(e) {
+		if (e.keyCode == 39) {			
+			prota.setAnimation("statr");
+		}
+		if (e.keyCode == 37) {			
+			prota.setAnimation("statl");
 		}
 		e.preventDefault();
 		// to stop the key events from bubbling up
@@ -104,7 +114,7 @@ function Personaje(x, y, imagen) {
 	this.y = y;
 	var animations = {
 		idler : [{
-			x : 5,
+			x : 0,
 			y : 0,
 			width : 50,
 			height : 90
@@ -132,17 +142,17 @@ function Personaje(x, y, imagen) {
 			width : 50,
 			height : 100,
 		}],
-		idlel : [{
-			x : 205,
+		idlel : [{			
+			x : 245,
 			y : 0,
-			width : 50,
+			width : 45,
 			height : 90
 		}],
 		statl : [{
-			x : 245,
+			x : 200,
 			y : 0,
-			width : 40,
-			height : 85
+			width : 45,
+			height : 90
 		}],
 		punchl : [{
 			x : 150,
