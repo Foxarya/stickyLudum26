@@ -77,6 +77,7 @@ function cargarImagenes() {
 function logicaJuego() {
 	prota = new Personaje(90, 310, dictImg['Sticky']);
 	capa.add(prota);
+	//capa.add(prota.rectangulo);
 	prota.setId("#prota");
 	$('#container').attr('tabindex', 0);
 	$('#container').keydown(function(e) {
@@ -90,7 +91,7 @@ function logicaJuego() {
 				//	prota.setAnimation("idler");
 				//}
 			});
-			
+
 		}
 		if (e.keyCode == 37) {
 			prota.setAnimation("walkl");
@@ -134,6 +135,16 @@ function logicaJuego() {
 function Personaje(x, y, imagen) {
 	this.x = x;
 	this.y = y;
+	var rectangulo = new Kinetic.Rect({
+		x : x + 5,
+		y : y + 5,
+		width : 30,
+		height : 78,
+		stroke : '#000',
+		strokeWidth : 2,
+		fill : '#ddd',
+	});
+	capa.add(rectangulo);
 	var animations = {
 		walkr : [{
 			x : 0,
@@ -206,4 +217,5 @@ function Personaje(x, y, imagen) {
 	return blob;
 
 }
+
 
