@@ -13,6 +13,10 @@ var escenario = new Kinetic.Stage({
 
 var capa = new Kinetic.Layer();
 
+var debugging = 0;
+
+
+
 var puntosDestino = [{
 	x : 73,
 	y : 160
@@ -44,9 +48,15 @@ function mover(elemento) {
 		easing : 'ease-in-out',
 		callback : function() {
 			if (contador + 1 < puntosDestino.length) {
-				var nuevoVertice = new Kinetic.Node({
+				var nuevoVertice = new Kinetic.Circle({
 					x : puntosDestino[contador].x,
-					y : puntosDestino[contador].y
+					y : puntosDestino[contador].y,
+					radius : 10,
+					opacity: debugging,
+					fill : 'red',
+					stroke : 'black',
+					strokeWidth : 4,
+					draggable : true
 				});
 				contador++;
 				capa.add(nuevoVertice);
@@ -61,14 +71,24 @@ function mover(elemento) {
 
 $(document).ready(function() {
 
-	var verticeA = new Kinetic.Node({
+	var verticeA = new Kinetic.Circle({
 		x : 73,
-		y : 160
+		y : 160,
+		radius : 10,
+		opacity: debugging,
+		fill : 'red',
+		stroke : 'black',
+		strokeWidth : 4
 	});
 
-	var verticeB = new Kinetic.Node({
+	var verticeB = new Kinetic.Circle({
 		x : 73,
-		y : 160
+		y : 160,
+		radius : 10,
+		opacity: debugging,
+		fill : 'red',
+		stroke : 'black',
+		strokeWidth : 4
 	});
 	
 	var blueSpline = new Kinetic.Spline({
