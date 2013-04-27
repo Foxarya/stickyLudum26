@@ -1,4 +1,4 @@
-var dictImg;
+var dictImg = {};
 
 var escenario = new Kinetic.Stage({
 	container : 'container',
@@ -71,8 +71,9 @@ function cargarImagenes() {
 
 function logicaJuego() {
 	var prota = new Personaje(50, 50, dictImg['Sticky']);
-	//capa.add(prota);
-
+	capa.add(prota);
+	capa.draw();
+	prota.start();
 }
 
 function Personaje(x, y, imagen) {
@@ -80,10 +81,10 @@ function Personaje(x, y, imagen) {
 	this.y = y;
 	var animations = {
 		idle : [{
-			x : 10,
-			y : 5,
-			width : 130,
-			height : 285
+			x : 5,
+			y : 0,
+			width : 50,
+			height : 90
 		}],
 		stat : [{
 			x : 230,
@@ -119,13 +120,8 @@ function Personaje(x, y, imagen) {
 		index : 0
 	});
 	return blob;
-	capa.add(blob);
-	capa.draw();
-	blob.start();
+	
 
 }
 
-Personaje.prototype.mover = function() {
-
-}
 
