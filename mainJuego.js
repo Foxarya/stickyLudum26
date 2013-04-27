@@ -13,3 +13,11 @@ var escenario = new Kinetic.Stage({
 });
 
 var capa = new Kinetic.Layer();
+
+$(document).ready(function () {
+	
+	
+	
+	escenario.add(capa);
+	
+});
