@@ -50,3 +50,30 @@ function cargarImagenes() {
 function logicaJuego(){
 	
 }
+
+var animations = {
+        idle: [{
+        	x: 2,
+        	y: 2,
+        	width: 70,
+        	height: 119
+        }],
+        stat: [{
+        	x: 2,
+        	y: 2,
+        	width: 2,
+        	height:2 ,
+        }],
+        punch: [{
+        	x: 2,
+        	y: 138,
+        	width: 74,
+        	height: 122
+        }],
+        jump: [{
+        	x: 2,
+        	y: 2,
+        	width: 2,
+        	height: 2,
+        }]
+      };
