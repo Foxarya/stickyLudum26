@@ -17,19 +17,22 @@
 		<link rel="shortcut icon" href="/favicon.ico" />
 		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 		<script src="http://code.jquery.com/jquery-1.9.1.js" ></script>
+		<link href="estilo.css" rel="stylesheet" type="text/css" />
 	</head>
 
 	<body>
-		<div id="container" style="width: 900px;margin: 0 auto;border: 2px solid black">
+		<div id="container" >
 			<script>
 				var canvas = document.getElementById('container');
 				canvas.onselectstart = function() {
 					return false;
 				}
 			</script>
+			<canvas id="debugCanvas"></canvas>
 			<script src="http://d3lp1msu2r81bx.cloudfront.net/kjs/js/lib/kinetic-v4.4.3.min.js"></script>
 			<script src="motorDibujado.js" defer="defer"></script>
 			<script src="mainJuego.js" defer="defer"></script>
+			<script src="Box2dWeb.min.js" defer="defer"></script>
 			
 
 		</div>
