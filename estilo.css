@@ -1,6 +1,7 @@
 #container, #debugCanvas {
 	z-index: 1;
 	width: 900px;
+	height: 975;
 	margin: 0 auto;
 	border: 2px solid black;
 	position: absolute;
@@ -9,6 +10,4 @@
 
 #debugCanvas {
 	z-index: 2;
-	position: absolute;
-	display: inline;
 }
