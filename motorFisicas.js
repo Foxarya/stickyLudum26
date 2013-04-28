@@ -1,3 +1,4 @@
+// Elemento B es la caja del personaje
 function hayColision(elementoA, elementoB) {
 	var verti = [];
 	var verti2 = [];
@@ -15,6 +16,7 @@ function hayColision(elementoA, elementoB) {
 	verti[3].x = elementoB.getX() + elementoB.getWidth();
 	verti[3].y = elementoB.getY() + elementoB.getHeight;
 	
+	/*
 	verti2[0].x = elementoB.getX();
 	verti2[0].y = elementoB.getY();
 	verti2[1].x = elementoB.getX() + elementoB.getWidth();
@@ -28,10 +30,13 @@ function hayColision(elementoA, elementoB) {
 	var mayorY = Math.max(elementoA.getY(), elementoA.getY() + elementoA.getHeight());
 	var menorX = Math.min(elementoA.getX(), elementoA.getX() + elementoA.getWidth());
 	var menorY = Math.min(elementoA.getY(), elementoA.getY() + elementoA.getHeight());
+	*/
 	for(var i = 0 ; i < 4 ; i++){
-		if ((verti[i].x > menorX && verti[i].x < mayorX) && (verti[i].y > menorY && verti[i].y < mayorY)) {
+		elementoA.getIntersections({x: verti[i].x, y: verti[i].y});
+		/*if ((verti[i].x > menorX && verti[i].x < mayorX) && (verti[i].y > menorY && verti[i].y < mayorY)) {
 			//Calculamos la interpolacion
-		} 
+			var interp = (verti[i].x - verti2[0].x) / (verti2[1] - ) 
+		} */
 	}
 
 	return false;

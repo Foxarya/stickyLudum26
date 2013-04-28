@@ -1,0 +1,12 @@
+#container, #debugCanvas {
+	z-index: 1;
+	width: 900px;
+	margin: 0 auto;
+	border: 2px solid black;
+}
+
+#debugCanvas {
+	z-index: 2;
+	display: none;
+	position: absolute;
+}
