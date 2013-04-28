@@ -120,7 +120,7 @@ function logicaJuego() {
 		debugDraw.SetFillAlpha(0.5);
 		debugDraw.SetLineThickness(1.0);
 		debugDraw.SetFlags(Box2D.Dynamics.b2DebugDraw.e_shapeBit | Box2D.Dynamics.b2DebugDraw.e_jointBit | Box2D.Dynamics.b2DebugDraw.e_centerOfMassBit);
-	
+	world.SetDebugDraw(debugDraw);
 		
 	prota = new Personaje(90, 310, dictImg['Sticky']);
 	capa.add(prota);
@@ -194,7 +194,7 @@ function Personaje(x, y, imagen) {
 	bodyDef.position.x = 1;
 	bodyDef.position.y = 1;
 	
-	var msize = pixelToMeters(1000,1000)
+	var msize = pixelToMeters(30,78)
 	fixDef.shape.SetAsBox(msize.x,msize.y);
 	
 	world.CreateBody(bodyDef).CreateFixture(fixDef);
