@@ -128,11 +128,11 @@ function initBox2d() {
 	bodyDef.type = b2Body.b2_staticBody;
 	bodyDef.position.x = escenario.getWidth() / 2 / scale;
 	// We use screenH for y coordinate as the ground has to be at the bottom of our screen
-	bodyDef.position.y = escenario.getHeight() / scale;
+	bodyDef.position.y = (escenario.getHeight() - 50) / scale;
 
 	// here we define ground as a rectangular box of width = screenW and height = 10 (just some small number to make a thin strip)
 	fixDef.shape = new b2PolygonShape;
-	fixDef.shape.SetAsBox((escenario.getWidth() / 2) / scale, 10 / scale);
+	fixDef.shape.SetAsBox((escenario.getWidth() / 2 - 10) / scale, 10 / scale);
 
 	// And finally add our ground object to our world
 	world.CreateBody(bodyDef).CreateFixture(fixDef);
@@ -182,14 +182,12 @@ function initBox2d() {
 		}
 
 		if (debugging) {
-			debugDraw.SetSprite(capaDebug.getContext());
-			world.SetDebugDraw(debugDraw);
+			contextoDebug.setTransform(escenario.getAbsoluteTransform().m[0], escenario.getTransform().m[1], escenario.getTransform().m[2], escenario.getTransform().m[3], escenario.getTransform().m[4], escenario.getTransform().m[5]);
 			world.DrawDebugData();
 			debugEscenario.setPosition(escenario.getX(), escenario.getY());
 		}
 
 	}, capa);
-
 	
 
 }
