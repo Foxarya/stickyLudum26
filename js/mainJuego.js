@@ -212,8 +212,10 @@ function logicaJuego() {
 					prota.nodo.setAnimation("jumpr");
 				else
 					prota.nodo.setAnimation("jumpl");
-				prota.body.ApplyImpulse(new b2Vec2(0, -150), prota.body.GetWorldCenter());				
+				prota.body.ApplyImpulse(new b2Vec2(0, -150), prota.body.GetWorldCenter());								
 			}
+			if(prota.stilltime < 500)
+				prota.body.ApplyImpulse(new b2Vec2(0, -25), prota.body.GetWorldCenter());
 		}
 
 	});
