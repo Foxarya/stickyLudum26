@@ -5,7 +5,9 @@ var scale = 20.0;
 function Personaje(x, y, imagen) {
 	this.x = x;
 	this.y = y;
-
+	this.salto = 0;
+	this.direccion = 1;
+	
 	var animations = {
 		walkr : [{
 			x : 0,
@@ -25,14 +27,14 @@ function Personaje(x, y, imagen) {
 			width : 140,
 			height : 85
 		}],
-		jumpr : [{
+		jumpr : [/*{
 			x : 5,
 			y : 100,
 			width : 40,
 			height : 80,
-		}, {
+		},*/ {
 			x : 50,
-			y : 80,
+			y : 95,
 			width : 50,
 			height : 100,
 		}],
@@ -54,14 +56,14 @@ function Personaje(x, y, imagen) {
 			width : 140,
 			height : 85
 		}],
-		jumpl : [{
+		jumpl : [/*{
 			x : 245,
 			y : 100,
 			width : 40,
 			height : 80,
-		}, {
+		}, */{
 			x : 195,
-			y : 80,
+			y : 95,
 			width : 50,
 			height : 100,
 		}],
