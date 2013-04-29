@@ -186,7 +186,7 @@ function dibujarMapa() {
 
 		var masCercano = distancias[0];
 
-		if (masCercano.distancia < 300 && pasados.indexOf(masCercano.indice) == -1 && !moviendo && contador + 1 < puntosDestino.length) {
+		/*if (masCercano.distancia < 300 && pasados.indexOf(masCercano.indice) == -1 && !moviendo && contador + 1 < puntosDestino.length) {
 
 			pasados.push(masCercano.indice);
 			contador = indiceVertice(vertices[masCercano.indice]);
@@ -206,6 +206,13 @@ function dibujarMapa() {
 			capa.draw();
 			vertices.push(nuevoVertice);
 			dibujaParcial(nuevoVertice);
+		}*/
+		
+		if (masCercano.distancia < 300 && !moviendo) {
+
+			contador = indiceVertice(vertices[masCercano.indice]);
+			dibujaParcial(vertices[masCercano.indice]);
+			
 		}
 
 	}, capa);
