@@ -9,6 +9,7 @@ function Personaje(x, y, imagen) {
 	this.direccion = 1;
 	this.grounded = false;
 	this.movement = false;
+	this.stilltime = 0;
 	
 	var animations = {
 		walkr : [{
