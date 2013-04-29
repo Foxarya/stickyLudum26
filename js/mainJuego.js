@@ -7,6 +7,8 @@ var escenario = new Kinetic.Stage({
 	draggable : true
 });
 
+var text;
+
 var debugging = true;
 
 var capa = new Kinetic.Layer();
@@ -169,12 +171,13 @@ function initBox2d() {
 		world.ClearForces();
 
 		// Camera control
-		/*
-		if (escenario.getX() + (escenario.getWidth() - 200) / 2 > prota.body.GetPosition().x * scale)
-			//alert("izquierda");
-			moveCamera(prota.body.GetPosition().x * scale, prota.body.GetPosition().y * scale);
-		if (escenario.getX() + escenario.getWidth() - (escenario.getWidth() - 200) / 2 < prota.body.GetPosition().x * scale)
-			alert("derecha");*/
+		
+		if ( (escenario.getWidth() - 200) / 2 - escenario.getX() > prota.body.GetPosition().x * scale)			
+			escenario.setX(escenario.getX() + 4);
+			//moveTransition(escenario.getX() + 4,0);
+		if (escenario.getWidth() - escenario.getX() - (escenario.getWidth() - 200) / 2 < prota.body.GetPosition().x * scale)
+			escenario.setX(escenario.getX() - 4);
+			
 		// Traverse through all the box2d objects and update the positions and rotations of corresponding KineticJS objects
 		for (var i = 0; i < nodos.length; i++) {
 			var body = nodos[i].body;
@@ -203,6 +206,15 @@ function logicaJuego() {
 	var impulso = 150;
 	prota = new Personaje(escenario.getWidth() / 2, 310, dictImg['Sticky']);
 
+	text = new Kinetic.Text({
+		x : 10 / 2,
+		y : 15,
+		text : '',
+		fontSize : 30,
+		fontFamily : 'Calibri',
+		fill : 'green'
+	});
+	capa.add(text);
 	//prota.nodo.setId("#prota");
 
 	capa.add(prota.nodo);
@@ -217,15 +229,13 @@ function logicaJuego() {
 			if (!keypressed) {
 				prota.nodo.setAnimation("walkr");
 				prota.body.ApplyImpulse(new b2Vec2(300, 0), prota.body.GetWorldCenter());
-				//alert(prota.body.GetLinearVelocity().x);
 				//prota.body.GetFixtureList().m_friction = 0;
 				e.preventDefault();
 				keypressed = true;
 				prota.direction = 1;
 				prota.movement = true;
 			}
-			if (escenario.getX() + escenario.getWidth() - (escenario.getWidth() - 200) / 2 < prota.body.GetPosition().x * scale)
-				escenario.setX(escenario.getX() - 5);
+
 		} else if (e.keyCode == 37) {
 			if (!keypressed) {
 				prota.nodo.setAnimation("walkl");
@@ -236,10 +246,6 @@ function logicaJuego() {
 				prota.direction = 0;
 				prota.movement = true;
 			}
-			if (escenario.getX() + (escenario.getWidth() - 200) / 2 > prota.body.GetPosition().x * scale)
-			//alert("izquierda");
-				//escenario.setX(-((prota.body.GetPosition().x * scale) - (escenario.getWidth() - 200)));
-				escenario.setX(escenario.getX() + 5);
 
 		}
 		if (e.keyCode == 32) {
@@ -285,18 +291,4 @@ function logicaJuego() {
 
 	prota.nodo.start();
 
-}
-function moveTransition(newx,newy){
-	escenario.transitionTo({
-	x : -10,
-	y : 0,
-	duration : 3,
-	easing : 'ease-in-out'
-});
-
-}
-function moveCamera(newx, newy) {
-
-	 escenario.setPosition(-newx / 2,-newy / 2);
-	//capa.draw();
 }
