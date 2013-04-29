@@ -158,14 +158,14 @@ function logicaJuego() {
 			moviendo = true;
 			prota.nodo.setAnimation("walkr");
 			prota.body.ApplyForce(new b2Vec2(99,0), prota.body.GetWorldCenter());
-			prota.body.SetFriction(0);
+			prota.body.SetFriction(1);
 			e.preventDefault();
 		}
 		if (e.keyCode == 37) {
 			moviendo = true;
 			prota.nodo.setAnimation("walkl");
 			prota.body.ApplyForce(new b2Vec2(-99,0), prota.body.GetWorldCenter());
-			prota.body.SetFriction(0);
+			prota.body.SetFriction(1);
 			e.preventDefault();
 		}
 
