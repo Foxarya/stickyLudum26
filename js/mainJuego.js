@@ -185,7 +185,7 @@ function logicaJuego() {
 		if (e.keyCode == 39) {
 			if (!keypressed) {
 				prota.nodo.setAnimation("walkr");
-				prota.body.ApplyImpulse(new b2Vec2(150, 0), prota.body.GetWorldCenter());
+				prota.body.ApplyImpulse(new b2Vec2(300, 0), prota.body.GetWorldCenter());
 				//alert(prota.body.GetLinearVelocity().x);
 				//prota.body.GetFixtureList().m_friction = 0;
 				e.preventDefault();
@@ -196,7 +196,7 @@ function logicaJuego() {
 		} else if (e.keyCode == 37) {
 			if (!keypressed) {
 				prota.nodo.setAnimation("walkl");
-				prota.body.ApplyImpulse(new b2Vec2(-150, 0), prota.body.GetWorldCenter());
+				prota.body.ApplyImpulse(new b2Vec2(-300, 0), prota.body.GetWorldCenter());
 				//prota.body.GetFixtureList().m_friction = 0;
 				e.preventDefault();
 				keypressed = true;
