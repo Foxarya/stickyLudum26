@@ -110,8 +110,8 @@ function initBox2d() {
 		for (var i = 0; i < nodos.length; i++) {
 			var body = nodos[i].body;
 			// A small hack to save on unnecessary redraws.
-			if (!body.IsAwake())
-				count++;
+			//if (!body.IsAwake())
+			//	count++;
 
 			var nodo = nodos[i].nodo;
 			var p = body.GetPosition();
@@ -156,14 +156,14 @@ function logicaJuego() {
 	$(document).keydown(function(e) {
 		if (e.keyCode == 39) {
 			prota.nodo.setAnimation("walkr");
-			prota.body.ApplyForce(new b2Vec2(99,0), prota.body.GetWorldCenter());
-			prota.body.SetFriction(1);
+			prota.body.ApplyImpulse(new b2Vec2(2,0), prota.body.GetWorldCenter());
+			prota.body.GetFixtureList().m_friction = 0;
 			e.preventDefault();
 		}
 		if (e.keyCode == 37) {
 			prota.nodo.setAnimation("walkl");
-			prota.body.ApplyForce(new b2Vec2(-99,0), prota.body.GetWorldCenter());
-			prota.body.SetFriction(1);
+			prota.body.ApplyImpulse(new b2Vec2(-2,0), prota.body.GetWorldCenter());
+			prota.body.GetFixtureList().m_friction = 0;
 			e.preventDefault();
 		}
 
@@ -171,12 +171,12 @@ function logicaJuego() {
 	$(document).keyup(function(e) {
 		if (e.keyCode == 39) {
 			prota.nodo.setAnimation("idler");
-			prota.body.SetFriction(1);
+			prota.body.GetFixtureList().m_friction = 100;
 			e.preventDefault();
 		}
 		if (e.keyCode == 37) {
 			prota.nodo.setAnimation("idlel");
-			prota.body.SetFriction(1);
+			prota.body.GetFixtureList().m_friction = 100;
 			e.preventDefault();
 		}
 
