@@ -12,6 +12,8 @@ var capa = new Kinetic.Layer();
 
 var prota, world, context, nodos = [];
 
+var stilltime = 0;
+
 $(document).ready(function() {
 
 	escenario.add(capa);
@@ -101,19 +103,32 @@ function initBox2d() {
 	var tickFisicas = new Kinetic.Animation(function(frame) {
 		world.Step(1 / frame.frameRate, 3, 3);
 		// timestep, velocityIterations, positionIterations. Read manual for more details
-
+		
+		
+		// Controls for jump
+		prota.stilltime += frame.timeDiff;
 		if ((!prota.grounded) && prota.body.GetLinearVelocity().y > -1) {
 			if (prota.direction == 1)
 				prota.nodo.setAnimation("idler");
 			else
 				prota.nodo.setAnimation("idlel");
 		}
-		if(prota.grounded && !prota.movement && !prota.jump)
+		if(prota.grounded && !prota.movement && prota.stilltime > 200)
 			prota.body.SetLinearVelocity(new b2Vec2(0, 0));
 		if (prota.body.GetContactList() != null)
 			prota.grounded = true;
 		else
 			prota.grounded = false;
+			
+		// Controls to the force	
+		if( prota.body.GetLinearVelocity().x > 9)
+			prota.body.SetLinearVelocity(new b2Vec2(9,prota.body.GetLinearVelocity().y));
+		else if( prota.body.GetLinearVelocity().x < -9)
+			prota.body.SetLinearVelocity(new b2Vec2(-9,prota.body.GetLinearVelocity().y));
+		
+		if( prota.body.GetLinearVelocity().y < -9)
+			prota.body.SetLinearVelocity(new b2Vec2(prota.body.GetLinearVelocity().x, -9));
+		
 		// This is called after we are done with time steps to clear the forces
 		world.ClearForces();
 
@@ -141,7 +156,7 @@ function initBox2d() {
 	// The native function that draws the object for us to debug their physics and visualize interaction
 	var debugDraw = new b2DebugDraw();
 	debugDraw.SetSprite(context);
-	debugDraw.SetDrawScale(5);
+	debugDraw.SetDrawScale(2);
 	debugDraw.SetFillAlpha(0.5);
 	debugDraw.SetLineThickness(1.0);
 	debugDraw.SetFlags(b2DebugDraw.e_shapeBit | b2DebugDraw.e_jointBit | b2DebugDraw.e_centerOfMassBit);
@@ -169,6 +184,7 @@ function logicaJuego() {
 			if (!keypressed) {
 				prota.nodo.setAnimation("walkr");
 				prota.body.ApplyImpulse(new b2Vec2(150, 0), prota.body.GetWorldCenter());
+				//alert(prota.body.GetLinearVelocity().x);
 				//prota.body.GetFixtureList().m_friction = 0;
 				e.preventDefault();
 				keypressed = true;
@@ -189,11 +205,12 @@ function logicaJuego() {
 		if (e.keyCode == 32) {
 			if ((!prota.jump) && prota.grounded) {
 				prota.jump = true;
+				prota.stilltime = 0;
 				if (prota.direction == 1)
 					prota.nodo.setAnimation("jumpr");
 				else
 					prota.nodo.setAnimation("jumpl");
-				prota.body.ApplyImpulse(new b2Vec2(0, -150), prota.body.GetWorldCenter());
+				prota.body.ApplyImpulse(new b2Vec2(0, -150), prota.body.GetWorldCenter());				
 			}
 		}
 
