@@ -81,7 +81,7 @@ function initBox2d() {
 	// Basic properties of ground
 	var fixDef = new b2FixtureDef;
 	fixDef.density = 2.0;
-	fixDef.friction = 1;
+	fixDef.friction = 0;
 	fixDef.restitution = 0;
 
 	// Ground is nothing but just a static rectangular body with its center at screenW/2 and screenH
