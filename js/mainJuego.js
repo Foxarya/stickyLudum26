@@ -71,6 +71,31 @@ function cargarImagenes() {
 
 }
 
+function cargarPuntos() {
+	$.ajax({
+		type : "GET",
+		url : "maps.xml",
+		dataType : "xml",
+		success : function(xml) {
+			var i = 0;
+			var numeroLineas = $(xml).find('linea').length;
+			var numeroPuntos = $(xml).find('vertice').length;
+			$(xml).find('linea').each(function() {
+				var j = 0;
+				$(xml).find('vertice').each(function() {
+					var str = $(this).text();
+					var x = str.subString(0,str.indexOf(','));
+					var y =  str.subString(str.indexOf(','),str.length);
+					puntosDestino[i][j]	= {x: x.parseInt(), y: y.parseInt()};
+					j++;
+				});
+				i++;
+			});
+		}
+	});
+}
+
+
 function initBox2d() {
 
 	// Define the world
