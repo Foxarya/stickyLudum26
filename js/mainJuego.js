@@ -3,7 +3,8 @@ var dictImg = {};
 var escenario = new Kinetic.Stage({
 	container : 'container',
 	width : 900,
-	height : 575
+	height : 575,
+	draggable : true
 });
 
 var debugging = true;
@@ -77,6 +78,18 @@ function initBox2d() {
 	world = new b2World(new b2Vec2(0, 10)//gravity of 10 in downward y direction
 	, true //allows objects to sleep if they are in equilibrium, indicated by change of color from Red to Grey in debugDraw mode
 	);
+	
+	// The native function that draws the object for us to debug their physics and visualize interaction
+	if (debugging) {
+		var debugDraw = new b2DebugDraw();
+		debugDraw.SetSprite(contextoDebug);
+		debugDraw.SetDrawScale(scale);
+		debugDraw.SetFillAlpha(0.5);
+		debugDraw.SetLineThickness(1.0);
+		debugDraw.SetFlags(b2DebugDraw.e_shapeBit | b2DebugDraw.e_jointBit | b2DebugDraw.e_centerOfMassBit);
+
+		world.SetDebugDraw(debugDraw);
+	}
 
 	// Define the Ground
 	// Basic properties of ground
@@ -117,14 +130,14 @@ function initBox2d() {
 			prota.grounded = true;
 		else
 			prota.grounded = false;
-			
-		// Controls to the force	
-		if( prota.body.GetLinearVelocity().x > 9)
-			prota.body.SetLinearVelocity(new b2Vec2(9,prota.body.GetLinearVelocity().y));
-		else if( prota.body.GetLinearVelocity().x < -9)
-			prota.body.SetLinearVelocity(new b2Vec2(-9,prota.body.GetLinearVelocity().y));
-		
-		if( prota.body.GetLinearVelocity().y < -9)
+
+		// Controls to the force
+		if (prota.body.GetLinearVelocity().x > 9)
+			prota.body.SetLinearVelocity(new b2Vec2(9, prota.body.GetLinearVelocity().y));
+		else if (prota.body.GetLinearVelocity().x < -9)
+			prota.body.SetLinearVelocity(new b2Vec2(-9, prota.body.GetLinearVelocity().y));
+
+		if (prota.body.GetLinearVelocity().y < -9)
 			prota.body.SetLinearVelocity(new b2Vec2(prota.body.GetLinearVelocity().x, -9));
 
 		// This is called after we are done with time steps to clear the forces
@@ -143,20 +156,16 @@ function initBox2d() {
 			nodo.setPosition(p.x * scale, p.y * scale);
 		}
 
-		if (debugging)
+		if (debugging) {
+			debugDraw.SetSprite(capaDebug.getContext());
+			world.SetDebugDraw(debugDraw);
 			world.DrawDebugData();
+			debugEscenario.setPosition(escenario.getX(), escenario.getY());
+		}
 
 	}, capa);
 
-	// The native function that draws the object for us to debug their physics and visualize interaction
-	var debugDraw = new b2DebugDraw();
-	debugDraw.SetSprite(contextoDebug);
-	debugDraw.SetDrawScale(scale);
-	debugDraw.SetFillAlpha(0.5);
-	debugDraw.SetLineThickness(1.0);
-	debugDraw.SetFlags(b2DebugDraw.e_shapeBit | b2DebugDraw.e_jointBit | b2DebugDraw.e_centerOfMassBit);
-
-	world.SetDebugDraw(debugDraw);
+	
 
 }
 
@@ -205,9 +214,9 @@ function logicaJuego() {
 					prota.nodo.setAnimation("jumpr");
 				else
 					prota.nodo.setAnimation("jumpl");
-				prota.body.ApplyImpulse(new b2Vec2(0, -150), prota.body.GetWorldCenter());								
+				prota.body.ApplyImpulse(new b2Vec2(0, -150), prota.body.GetWorldCenter());
 			}
-			if(prota.stilltime < 500)
+			if (prota.stilltime < 500)
 				prota.body.ApplyImpulse(new b2Vec2(0, -25), prota.body.GetWorldCenter());
 		}
 
@@ -238,7 +247,6 @@ function logicaJuego() {
 
 	});
 
-	if (!debugging)
-		prota.nodo.start();
+	prota.nodo.start();
 
 }

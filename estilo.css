@@ -7,7 +7,3 @@
 	position: absolute;
 	display: inline;
 }
-
-#debugCanvas {
-	z-index: 2
-}
