@@ -10,7 +10,7 @@ var debugging = true;
 
 var capa = new Kinetic.Layer();
 
-var prota, world, context, nodos = [];
+var prota, world, context, tickFisicas, nodos = [];
 
 var stilltime = 0;
 
@@ -59,8 +59,8 @@ function cargarImagenes() {
 						barraCarga.destroy();
 						initBox2d();
 						logicaJuego();
-						if(!debugging)
-							dibujarMapa();
+						dibujarMapa();
+						tickFisicas.start();
 					}
 				};
 
@@ -72,8 +72,6 @@ function cargarImagenes() {
 }
 
 function initBox2d() {
-
-	context = capa.getContext();
 
 	// Define the world
 	world = new b2World(new b2Vec2(0, 10)//gravity of 10 in downward y direction
@@ -96,16 +94,15 @@ function initBox2d() {
 
 	// here we define ground as a rectangular box of width = screenW and height = 10 (just some small number to make a thin strip)
 	fixDef.shape = new b2PolygonShape;
-	fixDef.shape.SetAsBox(escenario.getWidth() / scale, 10 / scale);
+	fixDef.shape.SetAsBox((escenario.getWidth() / 2) / scale, 10 / scale);
 
 	// And finally add our ground object to our world
 	world.CreateBody(bodyDef).CreateFixture(fixDef);
 
-	var tickFisicas = new Kinetic.Animation(function(frame) {
+	tickFisicas = new Kinetic.Animation(function(frame) {
 		world.Step(1 / frame.frameRate, 3, 3);
 		// timestep, velocityIterations, positionIterations. Read manual for more details
-		
-		
+
 		// Controls for jump
 		prota.stilltime += frame.timeDiff;
 		if ((!prota.grounded) && prota.body.GetLinearVelocity().y > -1) {
@@ -114,22 +111,22 @@ function initBox2d() {
 			else
 				prota.nodo.setAnimation("idlel");
 		}
-		if(prota.grounded && !prota.movement && prota.stilltime > 200)
+		if (prota.grounded && !prota.movement && prota.stilltime > 200)
 			prota.body.SetLinearVelocity(new b2Vec2(0, 0));
 		if (prota.body.GetContactList() != null)
 			prota.grounded = true;
 		else
 			prota.grounded = false;
-			
-		// Controls to the force	
-		if( prota.body.GetLinearVelocity().x > 9)
-			prota.body.SetLinearVelocity(new b2Vec2(9,prota.body.GetLinearVelocity().y));
-		else if( prota.body.GetLinearVelocity().x < -9)
-			prota.body.SetLinearVelocity(new b2Vec2(-9,prota.body.GetLinearVelocity().y));
-		
-		if( prota.body.GetLinearVelocity().y < -9)
+
+		// Controls to the force
+		if (prota.body.GetLinearVelocity().x > 9)
+			prota.body.SetLinearVelocity(new b2Vec2(9, prota.body.GetLinearVelocity().y));
+		else if (prota.body.GetLinearVelocity().x < -9)
+			prota.body.SetLinearVelocity(new b2Vec2(-9, prota.body.GetLinearVelocity().y));
+
+		if (prota.body.GetLinearVelocity().y < -9)
 			prota.body.SetLinearVelocity(new b2Vec2(prota.body.GetLinearVelocity().x, -9));
-		
+
 		// This is called after we are done with time steps to clear the forces
 		world.ClearForces();
 
@@ -145,19 +142,15 @@ function initBox2d() {
 			nodo.setRotation(body.GetAngle());
 			nodo.setPosition(p.x * scale, p.y * scale);
 		}
-		
-		if(debugging)
+
+		if (debugging)
 			world.DrawDebugData();
-		else
-			capa.draw();
 
-	}, null);
-
-	tickFisicas.start();
+	}, capa);
 
 	// The native function that draws the object for us to debug their physics and visualize interaction
 	var debugDraw = new b2DebugDraw();
-	debugDraw.SetSprite(context);
+	debugDraw.SetSprite(contextoDebug);
 	debugDraw.SetDrawScale(scale);
 	debugDraw.SetFillAlpha(0.5);
 	debugDraw.SetLineThickness(1.0);
@@ -212,7 +205,7 @@ function logicaJuego() {
 					prota.nodo.setAnimation("jumpr");
 				else
 					prota.nodo.setAnimation("jumpl");
-				prota.body.ApplyImpulse(new b2Vec2(0, -150), prota.body.GetWorldCenter());				
+				prota.body.ApplyImpulse(new b2Vec2(0, -150), prota.body.GetWorldCenter());
 			}
 		}
 
@@ -242,8 +235,8 @@ function logicaJuego() {
 		}
 
 	});
-	
-	if(!debugging)
+
+	if (!debugging)
 		prota.nodo.start();
 
 }

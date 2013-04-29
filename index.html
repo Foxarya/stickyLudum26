@@ -21,9 +21,30 @@
 	</head>
 
 	<body>
-		<div id="container"></div>
+		<div id="container">
+
+		</div>
+		<div id="debugCanvas">
+			
+		</div>
 		<script src="http://d3lp1msu2r81bx.cloudfront.net/kjs/js/lib/kinetic-v4.4.3.min.js"></script>
 		<script src="js/libs/Box2dWeb.min.js" defer="defer"></script>
+		<script>
+			var contextoDebug;
+
+			var debugEscenario = new Kinetic.Stage({
+				container : 'debugCanvas',
+				width : 900,
+				height : 575
+			});
+
+			var capaDebug = new Kinetic.Layer();
+
+			debugEscenario.add(capaDebug);
+
+			contextoDebug = capaDebug.getContext();
+
+		</script>
 		<script>
 			var canvas = document.getElementById('container');
 			canvas.onselectstart = function() {
@@ -33,6 +54,6 @@
 		<script src="js/clases.js" defer="defer"></script>
 		<script src="js/motorDibujado.js" defer="defer"></script>
 		<script src="js/mainJuego.js" defer="defer"></script>
-		
+
 	</body>
 </html>
