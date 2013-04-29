@@ -5,8 +5,10 @@ var scale = 20.0;
 function Personaje(x, y, imagen) {
 	this.x = x;
 	this.y = y;
-	this.salto = 0;
+	this.jump = false;
 	this.direccion = 1;
+	this.grounded = false;
+	this.movement = false;
 	
 	var animations = {
 		walkr : [{
