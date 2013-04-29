@@ -84,37 +84,41 @@ function dibujaParcial(elemento) {
 	if (contador + 1 < puntosDestino.length) {
 		moviendoA = true;
 
-		var nuevoVertice = new Kinetic.Circle({
-			x : elemento.nodo.getX(),
-			y : elemento.nodo.getY(),
-			radius : 10,
-			opacity : debugging,
-			fill : 'red',
-			stroke : 'black',
-			strokeWidth : 4
-		});
+		var vertice = verticeIndice(contador + 1);
 
-		capa.add(nuevoVertice);
-		vertices.push(nuevoVertice);
+		if (vertice == null) {
+			vertice = new Kinetic.Circle({
+				x : elemento.nodo.getX(),
+				y : elemento.nodo.getY(),
+				radius : 10,
+				opacity : debugging,
+				fill : 'red',
+				stroke : 'black',
+				strokeWidth : 4
+			});
 
-		var distancia = calcularDistancia(nuevoVertice, puntosDestino[contador + 1]);
-		var velocidad = 200;
-		var tiempo = distancia / velocidad;
+			capa.add(nuevoVertice);
+			vertices.push(nuevoVertice);
 
-		nuevoVertice.transitionTo({
-			x : puntosDestino[contador + 1].x,
-			y : puntosDestino[contador + 1].y,
-			duration : tiempo,
-			easing : 'ease-in-out',
-			callback : function() {
-				moviendoA = false;
-				moviendo = (!moviendoA && !moviendoB) ? false : true;
+			var distancia = calcularDistancia(vertice, puntosDestino[contador + 1]);
+			var velocidad = 200;
+			var tiempo = distancia / velocidad;
 
-			}
-		});
+			nuevoVertice.transitionTo({
+				x : puntosDestino[contador + 1].x,
+				y : puntosDestino[contador + 1].y,
+				duration : tiempo,
+				easing : 'ease-in-out',
+				callback : function() {
+					moviendoA = false;
+					moviendo = (!moviendoA && !moviendoB) ? false : true;
+
+				}
+			});
+		}
 	}
 
-	if (contador - 1 >= 0) {
+	if (elemento.indice - 1 >= 0) {
 		moviendoB = true;
 		var anterior = vertices[elemento.indice - 1];
 		var distancia = calcularDistancia(anterior, puntosDestino[contador]);
@@ -146,6 +150,15 @@ function indiceVertice(vertice) {
 		}
 	}
 	return -1;
+}
+
+function verticeIndice(indice) {
+	for (var i = 0; i < vertices.length; i++) {
+		if (vertices[i].getX() == puntosDestino[indice].x && vertices[i].getY() == puntosDestino[indice].y) {
+			return vertices[i];
+		}
+	}
+	return null;
 }
 
 function dibujarMapa() {
