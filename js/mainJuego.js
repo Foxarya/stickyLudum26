@@ -76,7 +76,8 @@ function initBox2d() {
 	world = new b2World(new b2Vec2(0, 10)//gravity of 10 in downward y direction
 	, true //allows objects to sleep if they are in equilibrium, indicated by change of color from Red to Grey in debugDraw mode
 	);
-
+	
+	
 	// Define the Ground
 	// Basic properties of ground
 	var fixDef = new b2FixtureDef;
@@ -101,9 +102,7 @@ function initBox2d() {
 	var tickFisicas = new Kinetic.Animation(function(frame) {
 		world.Step(1 / frame.frameRate, 3, 3);
 		// timestep, velocityIterations, positionIterations. Read manual for more details
-
-		var count = 0;
-
+		
 		// This is called after we are done with time steps to clear the forces
 		world.ClearForces();
 
@@ -122,7 +121,7 @@ function initBox2d() {
 
 		world.DrawDebugData();
 
-		capa.draw();
+		//capa.draw();
 
 	}, capa);
 
@@ -137,6 +136,7 @@ function initBox2d() {
 	debugDraw.SetFlags(b2DebugDraw.e_shapeBit | b2DebugDraw.e_jointBit | b2DebugDraw.e_centerOfMassBit);
 
 	world.SetDebugDraw(debugDraw);
+
 
 }
 
