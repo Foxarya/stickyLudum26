@@ -16,8 +16,8 @@ var puntosDestino = [{
 }];
 
 var vertices = [];
-var contador = 1;
-var moviendo = true;
+var contador = 0;
+var moviendo = false;
 
 var linea;
 
@@ -79,20 +79,63 @@ function dibujaTodo(elemento) {
 function dibujaParcial(elemento) {
 
 	moviendo = true;
-	var distancia = calcularDistancia(elemento, puntosDestino[contador]);
-	var velocidad = 200;
-	var tiempo = distancia / velocidad;
+	var moviendoA = false, moviendoB = false;
 
-	elemento.transitionTo({
-		x : puntosDestino[contador].x,
-		y : puntosDestino[contador].y,
-		duration : tiempo,
-		easing : 'ease-in-out',
-		callback : function() {
-			moviendo = false;
+	if (contador + 1 < puntosDestino.length) {
+		moviendoA = true;
 
-		}
-	});
+		var nuevoVertice = new Kinetic.Circle({
+			x : elemento.nodo.getX(),
+			y : elemento.nodo.getY(),
+			radius : 10,
+			opacity : debugging,
+			fill : 'red',
+			stroke : 'black',
+			strokeWidth : 4
+		});
+
+		capa.add(nuevoVertice);
+		vertices.push(nuevoVertice);
+
+		var distancia = calcularDistancia(nuevoVertice, puntosDestino[contador + 1]);
+		var velocidad = 200;
+		var tiempo = distancia / velocidad;
+
+		nuevoVertice.transitionTo({
+			x : puntosDestino[contador + 1].x,
+			y : puntosDestino[contador + 1].y,
+			duration : tiempo,
+			easing : 'ease-in-out',
+			callback : function() {
+				moviendoA = false;
+				moviendo = (!moviendoA && !moviendoB) ? false : true;
+
+			}
+		});
+	}
+
+	if (contador - 1 >= 0) {
+		moviendoB = true;
+		var anterior = vertices[elemento.indice - 1];
+		var distancia = calcularDistancia(anterior, puntosDestino[contador]);
+		var velocidad = 200;
+		var tiempo = distancia / velocidad;
+
+		anterior.transitionTo({
+			x : puntosDestino[contador].x,
+			y : puntosDestino[contador].y,
+			duration : tiempo,
+			easing : 'ease-in-out',
+			callback : function() {
+				anterior.destroy();
+				vertices.splice(elemento.indice - 1, 1);
+				capa.draw();
+				moviendoB = false;
+				moviendo = (!moviendoA && !moviendoB) ? false : true;
+
+			}
+		});
+	}
 
 }
 
@@ -107,7 +150,7 @@ function indiceVertice(vertice) {
 
 function dibujarMapa() {
 
-	var verticeA = new Kinetic.Circle({
+	var primerVertice = new Kinetic.Circle({
 		x : puntosDestino[0].x,
 		y : puntosDestino[0].y,
 		radius : 10,
@@ -117,21 +160,10 @@ function dibujarMapa() {
 		strokeWidth : 4
 	});
 
-	var verticeB = new Kinetic.Circle({
-		x : puntosDestino[0].x,
-		y : puntosDestino[0].y,
-		radius : 10,
-		opacity : debugging,
-		fill : 'red',
-		stroke : 'black',
-		strokeWidth : 4
-	});
-
-	var pasados = [];
 	linea = new Kinetic.Spline({
 		points : [{
-			x : verticeA.getX(),
-			y : verticeA.getY()
+			x : primerVertice.getX(),
+			y : primerVertice.getY()
 		}],
 		stroke : 'black',
 		strokeWidth : 10,
@@ -139,16 +171,14 @@ function dibujarMapa() {
 		tension : 0.4
 	});
 
-	vertices.push(verticeA);
-	vertices.push(verticeB);
-	pasados.push(0);
+	vertices.push(primerVertice);
 
 	capa.add(linea);
-	capa.add(verticeA);
-	capa.add(verticeB);
+	capa.add(primerVertice);
 
 	escenario.add(capa);
 
+	var verticePasado = 0;
 	tickDibujo = new Kinetic.Animation(function() {
 
 		var puntos = [];
@@ -162,62 +192,71 @@ function dibujarMapa() {
 
 		linea.setPoints(puntos);
 
-		var distancias = [];
+		if (!moviendo) {
 
-		for (var i = 0; i < vertices.length; i++) {
+			var distancias = [];
 
-			var distancia = calcularDistancia(prota.nodo, vertices[i]);
+			for (var i = 0; i < vertices.length; i++) {
 
-			distancias.push({
-				distancia : distancia,
-				indice : i
+				var distancia = calcularDistancia(prota.nodo, vertices[i]);
+
+				distancias.push({
+					distancia : distancia,
+					indice : i
+				});
+
+			}
+
+			distancias.sort(function(a, b) {
+				if (a.distancia < b.distancia)
+					return -1;
+				if (a.distancia > b.distancia)
+					return 1;
+				return 0;
 			});
 
-		}
+			var masCercano = distancias[0];
 
-		distancias.sort(function(a, b) {
-			if (a.distancia < b.distancia)
-				return -1;
-			if (a.distancia > b.distancia)
-				return 1;
-			return 0;
-		});
+			/*if (masCercano.distancia < 300 && pasados.indexOf(masCercano.indice) == -1 && !moviendo && contador + 1 < puntosDestino.length) {
 
-		var masCercano = distancias[0];
+			 pasados.push(masCercano.indice);
+			 contador = indiceVertice(vertices[masCercano.indice]);
+			 var nuevoVertice = new Kinetic.Circle({
+			 x : puntosDestino[contador].x,
+			 y : puntosDestino[contador].y,
+			 radius : 10,
+			 opacity : debugging,
+			 fill : 'red',
+			 stroke : 'black',
+			 strokeWidth : 4,
+			 draggable : true
+			 });
 
-		/*if (masCercano.distancia < 300 && pasados.indexOf(masCercano.indice) == -1 && !moviendo && contador + 1 < puntosDestino.length) {
+			 contador++;
+			 capa.add(nuevoVertice);
+			 capa.draw();
+			 vertices.push(nuevoVertice);
+			 dibujaParcial(nuevoVertice);
+			 }*/
 
-		 pasados.push(masCercano.indice);
-		 contador = indiceVertice(vertices[masCercano.indice]);
-		 var nuevoVertice = new Kinetic.Circle({
-		 x : puntosDestino[contador].x,
-		 y : puntosDestino[contador].y,
-		 radius : 10,
-		 opacity : debugging,
-		 fill : 'red',
-		 stroke : 'black',
-		 strokeWidth : 4,
-		 draggable : true
-		 });
+			if (masCercano.distancia < 100 && verticePasado != masCercano.indice) {
 
-		 contador++;
-		 capa.add(nuevoVertice);
-		 capa.draw();
-		 vertices.push(nuevoVertice);
-		 dibujaParcial(nuevoVertice);
-		 }*/
+				verticePasado = masCercano.indice;
+				contador = indiceVertice(vertices[masCercano.indice]);
+				dibujaParcial({
+					nodo : vertices[masCercano.indice],
+					indice : masCercano.indice
+				});
 
-		if (masCercano.distancia < 300 && !moviendo) {
-
-			contador = indiceVertice(vertices[masCercano.indice]);
-			dibujaParcial(vertices[masCercano.indice]);
-
+			}
 		}
 
 	}, capa);
 
 	tickDibujo.start();
-
-	dibujaParcial(verticeB);
+	dibujaParcial({
+		nodo : primerVertice,
+		indice : 0
+	});
 
 };

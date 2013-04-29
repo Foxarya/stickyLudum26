@@ -21,17 +21,17 @@
 	</head>
 
 	<body>
-		<div id="container">
+
+		<div id="debugCanvas">
 
 		</div>
-		<div id="debugCanvas">
-			
+		<div id="container">
+
 		</div>
 		<script src="http://d3lp1msu2r81bx.cloudfront.net/kjs/js/lib/kinetic-v4.4.3.min.js"></script>
 		<script src="js/libs/Box2dWeb.min.js" defer="defer"></script>
 		<script>
 			var contextoDebug;
-
 			var debugEscenario = new Kinetic.Stage({
 				container : 'debugCanvas',
 				width : 900,
@@ -48,6 +48,10 @@
 		<script>
 			var canvas = document.getElementById('container');
 			canvas.onselectstart = function() {
+				return false;
+			}
+			var debugCanvas = document.getElementById('debugCanvas');
+			debugCanvas.onselectstart = function() {
 				return false;
 			}
 		</script>
