@@ -139,7 +139,8 @@ function initBox2d() {
 }
 
 function logicaJuego() {
-	var keypressed = 0;
+	var keypressed = 0, lef = 0, right = 0;
+	var impulso = 150;
 	prota = new Personaje(90, 310, dictImg['Sticky']);
 
 	//prota.nodo.setId("#prota");
@@ -159,15 +160,26 @@ function logicaJuego() {
 				prota.body.GetFixtureList().m_friction = 0;
 				e.preventDefault();
 				keypressed = 1;
+				prota.direccion = 1;
 			}
-		}
-		if (e.keyCode == 37) {
+		} else if (e.keyCode == 37) {
 			if (keypressed == 0) {
 				prota.nodo.setAnimation("walkl");
 				prota.body.ApplyImpulse(new b2Vec2(-150, 0), prota.body.GetWorldCenter());
 				prota.body.GetFixtureList().m_friction = 0;
 				e.preventDefault();
 				keypressed = 1;
+				prota.direccion = 0;
+			}
+		}
+		if (e.keyCode == 32) {
+			if (prota.salto == 0) {
+				prota.salto = 1;
+				if (prota.direccion == 1)
+					prota.nodo.setAnimation("jumpr");
+				else
+					prota.nodo.setAnimation("jumpl");
+				prota.body.ApplyImpulse(new b2Vec2(0, -150), prota.body.GetWorldCenter());
 			}
 		}
 
@@ -175,15 +187,21 @@ function logicaJuego() {
 	$(document).keyup(function(e) {
 		if (e.keyCode == 39) {
 			prota.nodo.setAnimation("idler");
-			prota.body.ApplyImpulse(new b2Vec2(-150, 0), prota.body.GetWorldCenter());
+			prota.body.SetLinearVelocity(new b2Vec2(0, 0));
+			e.preventDefault();
+			keypressed = 0;
+		} else if (e.keyCode == 37) {
+			prota.nodo.setAnimation("idlel");
+			prota.body.SetLinearVelocity(new b2Vec2(0, 0));
 			e.preventDefault();
 			keypressed = 0;
 		}
-		if (e.keyCode == 37) {
-			prota.nodo.setAnimation("idlel");
-			prota.body.ApplyImpulse(new b2Vec2(150, 0), prota.body.GetWorldCenter());
-			e.preventDefault();
-			keypressed = 0;
+		if (e.keyCode == 32) {
+			prota.salto = 0;
+			if (prota.direccion == 1)
+				prota.nodo.setAnimation("idler");
+			else
+				prota.nodo.setAnimation("idlel");
 		}
 
 	});
