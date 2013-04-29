@@ -85,7 +85,7 @@ function Personaje(x, y, imagen) {
 
 	var fixDef = new b2FixtureDef;
 	fixDef.density = 2.0;
-	fixDef.friction = 1;
+	fixDef.friction = 0;
 	fixDef.restitution = 0;
 
 	fixDef.shape = new b2PolygonShape;
