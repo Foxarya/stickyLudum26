@@ -6,7 +6,7 @@ var escenario = new Kinetic.Stage({
 	height : 575
 });
 
-var debugging = 1;
+var debugging = true;
 
 var capa = new Kinetic.Layer();
 
@@ -57,7 +57,8 @@ function cargarImagenes() {
 						barraCarga.destroy();
 						initBox2d();
 						logicaJuego();
-						dibujarMapa();
+						if(!debugging)
+							dibujarMapa();
 					}
 				};
 
@@ -70,7 +71,7 @@ function cargarImagenes() {
 
 function initBox2d() {
 
-	context = document.getElementById("debugCanvas").getContext('2d');
+	context = capa.getContext();
 
 	// Define the world
 	world = new b2World(new b2Vec2(0, 10)//gravity of 10 in downward y direction
@@ -129,19 +130,20 @@ function initBox2d() {
 			nodo.setRotation(body.GetAngle());
 			nodo.setPosition(p.x * scale, p.y * scale);
 		}
+		
+		if(debugging)
+			world.DrawDebugData();
+		else
+			capa.draw();
 
-		world.DrawDebugData();
-
-		//capa.draw();
-
-	}, capa);
+	}, null);
 
 	tickFisicas.start();
 
 	// The native function that draws the object for us to debug their physics and visualize interaction
 	var debugDraw = new b2DebugDraw();
 	debugDraw.SetSprite(context);
-	debugDraw.SetDrawScale(5);
+	debugDraw.SetDrawScale(scale);
 	debugDraw.SetFillAlpha(0.5);
 	debugDraw.SetLineThickness(1.0);
 	debugDraw.SetFlags(b2DebugDraw.e_shapeBit | b2DebugDraw.e_jointBit | b2DebugDraw.e_centerOfMassBit);
@@ -223,9 +225,9 @@ function logicaJuego() {
 		}
 
 	});
-
-	capa.draw();
-	prota.nodo.start();
+	
+	if(!debugging)
+		prota.nodo.start();
 
 }
 

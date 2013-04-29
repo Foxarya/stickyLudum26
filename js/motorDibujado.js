@@ -68,7 +68,7 @@ function dibujaTodo(elemento) {
 				});
 				contador++;
 				capa.add(nuevoVertice);
-				capa.draw();
+				//capa.draw();
 				vertices.push(nuevoVertice);
 				dibujaTodo(nuevoVertice);
 			}
@@ -126,7 +126,7 @@ function dibujarMapa() {
 		stroke : 'black',
 		strokeWidth : 4
 	});
-	
+
 	var pasados = [];
 	linea = new Kinetic.Spline({
 		points : [{
@@ -149,7 +149,6 @@ function dibujarMapa() {
 
 	escenario.add(capa);
 
-	
 	tickDibujo = new Kinetic.Animation(function() {
 
 		var puntos = [];
@@ -188,31 +187,31 @@ function dibujarMapa() {
 
 		/*if (masCercano.distancia < 300 && pasados.indexOf(masCercano.indice) == -1 && !moviendo && contador + 1 < puntosDestino.length) {
 
-			pasados.push(masCercano.indice);
-			contador = indiceVertice(vertices[masCercano.indice]);
-			var nuevoVertice = new Kinetic.Circle({
-				x : puntosDestino[contador].x,
-				y : puntosDestino[contador].y,
-				radius : 10,
-				opacity : debugging,
-				fill : 'red',
-				stroke : 'black',
-				strokeWidth : 4,
-				draggable : true
-			});
-			
-			contador++;
-			capa.add(nuevoVertice);
-			capa.draw();
-			vertices.push(nuevoVertice);
-			dibujaParcial(nuevoVertice);
-		}*/
-		
+		 pasados.push(masCercano.indice);
+		 contador = indiceVertice(vertices[masCercano.indice]);
+		 var nuevoVertice = new Kinetic.Circle({
+		 x : puntosDestino[contador].x,
+		 y : puntosDestino[contador].y,
+		 radius : 10,
+		 opacity : debugging,
+		 fill : 'red',
+		 stroke : 'black',
+		 strokeWidth : 4,
+		 draggable : true
+		 });
+
+		 contador++;
+		 capa.add(nuevoVertice);
+		 capa.draw();
+		 vertices.push(nuevoVertice);
+		 dibujaParcial(nuevoVertice);
+		 }*/
+
 		if (masCercano.distancia < 300 && !moviendo) {
 
 			contador = indiceVertice(vertices[masCercano.indice]);
 			dibujaParcial(vertices[masCercano.indice]);
-			
+
 		}
 
 	}, capa);
