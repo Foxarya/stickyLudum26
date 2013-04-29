@@ -189,7 +189,7 @@ function dibujarMapa() {
 
 		for (var i = 0; i < vertices.length; i++) {
 
-			var distancia = calcularDistancia(prota, vertices[i]);
+			var distancia = calcularDistancia(prota.nodo, vertices[i]);
 
 			distancias.push({
 				distancia : distancia,

@@ -21,21 +21,19 @@
 	</head>
 
 	<body>
-		<div id="container" >
-			<script>
-				var canvas = document.getElementById('container');
-				canvas.onselectstart = function() {
-					return false;
-				}
-			</script>
-			
-			<script src="http://d3lp1msu2r81bx.cloudfront.net/kjs/js/lib/kinetic-v4.4.3.min.js"></script>
-			<script src="motorDibujado.js" defer="defer"></script>
-			<script src="mainJuego.js" defer="defer"></script>
-			<script src="Box2dWeb.min.js" defer="defer"></script>
-			
-
-		</div>
+		<div id="container"></div>
 		<canvas id="debugCanvas"></canvas>
+		<script src="http://d3lp1msu2r81bx.cloudfront.net/kjs/js/lib/kinetic-v4.4.3.min.js"></script>
+		<script src="js/libs/Box2dWeb.min.js" defer="defer"></script>
+		<script>
+			var canvas = document.getElementById('container');
+			canvas.onselectstart = function() {
+				return false;
+			}
+		</script>
+		<script src="js/clases.js" defer="defer"></script>
+		<script src="js/motorDibujado.js" defer="defer"></script>
+		<script src="js/mainJuego.js" defer="defer"></script>
+		
 	</body>
 </html>

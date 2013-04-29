@@ -1,7 +1,7 @@
 #container, #debugCanvas {
 	z-index: 1;
 	width: 900px;
-	height: 975;
+	height: 575px;
 	margin: 0 auto;
 	border: 2px solid black;
 	position: absolute;
