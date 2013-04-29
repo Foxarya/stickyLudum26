@@ -101,7 +101,15 @@ function initBox2d() {
 	var tickFisicas = new Kinetic.Animation(function(frame) {
 		world.Step(1 / frame.frameRate, 3, 3);
 		// timestep, velocityIterations, positionIterations. Read manual for more details
-
+		
+		if(prota.grounded == 0 && prota.body.GetLinearVelocity().y > -1){
+			if (prota.direccion == 1)
+				prota.nodo.setAnimation("idler");
+			else
+				prota.nodo.setAnimation("idlel");
+		}
+		if(prota.body.GetContactList() != null)	prota.grounded = 1;
+		else prota.grounded = 0;
 		// This is called after we are done with time steps to clear the forces
 		world.ClearForces();
 
@@ -173,7 +181,7 @@ function logicaJuego() {
 			}
 		}
 		if (e.keyCode == 32) {
-			if (prota.salto == 0) {
+			if (prota.salto == 0 && prota.grounded == 1) {
 				prota.salto = 1;
 				if (prota.direccion == 1)
 					prota.nodo.setAnimation("jumpr");
@@ -197,11 +205,7 @@ function logicaJuego() {
 			keypressed = 0;
 		}
 		if (e.keyCode == 32) {
-			prota.salto = 0;
-			if (prota.direccion == 1)
-				prota.nodo.setAnimation("idler");
-			else
-				prota.nodo.setAnimation("idlel");
+			prota.salto = 0;			
 		}
 
 	});
