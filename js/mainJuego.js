@@ -117,14 +117,14 @@ function initBox2d() {
 			prota.grounded = true;
 		else
 			prota.grounded = false;
-
-		// Controls to the force
-		if (prota.body.GetLinearVelocity().x > 9)
-			prota.body.SetLinearVelocity(new b2Vec2(9, prota.body.GetLinearVelocity().y));
-		else if (prota.body.GetLinearVelocity().x < -9)
-			prota.body.SetLinearVelocity(new b2Vec2(-9, prota.body.GetLinearVelocity().y));
-
-		if (prota.body.GetLinearVelocity().y < -9)
+			
+		// Controls to the force	
+		if( prota.body.GetLinearVelocity().x > 9)
+			prota.body.SetLinearVelocity(new b2Vec2(9,prota.body.GetLinearVelocity().y));
+		else if( prota.body.GetLinearVelocity().x < -9)
+			prota.body.SetLinearVelocity(new b2Vec2(-9,prota.body.GetLinearVelocity().y));
+		
+		if( prota.body.GetLinearVelocity().y < -9)
 			prota.body.SetLinearVelocity(new b2Vec2(prota.body.GetLinearVelocity().x, -9));
 
 		// This is called after we are done with time steps to clear the forces
@@ -178,7 +178,7 @@ function logicaJuego() {
 		if (e.keyCode == 39) {
 			if (!keypressed) {
 				prota.nodo.setAnimation("walkr");
-				prota.body.ApplyImpulse(new b2Vec2(150, 0), prota.body.GetWorldCenter());
+				prota.body.ApplyImpulse(new b2Vec2(300, 0), prota.body.GetWorldCenter());
 				//alert(prota.body.GetLinearVelocity().x);
 				//prota.body.GetFixtureList().m_friction = 0;
 				e.preventDefault();
@@ -189,7 +189,7 @@ function logicaJuego() {
 		} else if (e.keyCode == 37) {
 			if (!keypressed) {
 				prota.nodo.setAnimation("walkl");
-				prota.body.ApplyImpulse(new b2Vec2(-150, 0), prota.body.GetWorldCenter());
+				prota.body.ApplyImpulse(new b2Vec2(-300, 0), prota.body.GetWorldCenter());
 				//prota.body.GetFixtureList().m_friction = 0;
 				e.preventDefault();
 				keypressed = true;
@@ -205,8 +205,10 @@ function logicaJuego() {
 					prota.nodo.setAnimation("jumpr");
 				else
 					prota.nodo.setAnimation("jumpl");
-				prota.body.ApplyImpulse(new b2Vec2(0, -150), prota.body.GetWorldCenter());
+				prota.body.ApplyImpulse(new b2Vec2(0, -150), prota.body.GetWorldCenter());								
 			}
+			if(prota.stilltime < 500)
+				prota.body.ApplyImpulse(new b2Vec2(0, -25), prota.body.GetWorldCenter());
 		}
 
 	});
