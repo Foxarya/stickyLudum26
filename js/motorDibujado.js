@@ -35,28 +35,6 @@ function calcularDistancia(a, b) {
 	return Math.sqrt(Math.pow(Adevolver.x - Bdevolver.x, 2) + Math.pow(Adevolver.y - Bdevolver.y, 2));
 }
 
-function hayColision(elementoA, elementoB) {
-
-	var centroB = {
-		x : elementoB.getX() + (elementoB.getWidth() / 2),
-		y : elementoB.getY() + (elementoB.getHeight() / 2)
-	};
-
-	var mayorX = Math.max(elementoA.getX(), elementoA.getX() + elementoA.getWidth());
-	var mayorY = Math.max(elementoA.getY(), elementoA.getY() + elementoA.getHeight());
-	var menorX = Math.min(elementoA.getX(), elementoA.getX() + elementoA.getWidth());
-	var menorY = Math.min(elementoA.getY(), elementoA.getY() + elementoA.getHeight());
-
-	if ((centroB.x > menorX && centroB.x < mayorX) && (centroB.y > menorY && centroB.y < mayorY)) {
-
-		return true;
-
-	}
-
-	return false;
-
-}
-
 function dibujaTodo(elemento) {
 	var distancia = calcularDistancia(elemento, puntosDestino[contador]);
 	var velocidad = 200;
@@ -172,7 +150,7 @@ function dibujarMapa() {
 	escenario.add(capa);
 
 	
-	animacion = new Kinetic.Animation(function() {
+	tickDibujo = new Kinetic.Animation(function() {
 
 		var puntos = [];
 
@@ -232,7 +210,7 @@ function dibujarMapa() {
 
 	}, capa);
 
-	animacion.start();
+	tickDibujo.start();
 
 	dibujaParcial(verticeB);
 
