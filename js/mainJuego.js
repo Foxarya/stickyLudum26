@@ -76,8 +76,7 @@ function initBox2d() {
 	world = new b2World(new b2Vec2(0, 10)//gravity of 10 in downward y direction
 	, true //allows objects to sleep if they are in equilibrium, indicated by change of color from Red to Grey in debugDraw mode
 	);
-	
-	
+
 	// Define the Ground
 	// Basic properties of ground
 	var fixDef = new b2FixtureDef;
@@ -102,7 +101,7 @@ function initBox2d() {
 	var tickFisicas = new Kinetic.Animation(function(frame) {
 		world.Step(1 / frame.frameRate, 3, 3);
 		// timestep, velocityIterations, positionIterations. Read manual for more details
-		
+
 		// This is called after we are done with time steps to clear the forces
 		world.ClearForces();
 
@@ -137,11 +136,10 @@ function initBox2d() {
 
 	world.SetDebugDraw(debugDraw);
 
-
 }
 
 function logicaJuego() {
-
+	var keypressed = 0;
 	prota = new Personaje(90, 310, dictImg['Sticky']);
 
 	//prota.nodo.setId("#prota");
@@ -155,29 +153,37 @@ function logicaJuego() {
 
 	$(document).keydown(function(e) {
 		if (e.keyCode == 39) {
-			prota.nodo.setAnimation("walkr");
-			prota.body.ApplyImpulse(new b2Vec2(2,0), prota.body.GetWorldCenter());
-			prota.body.GetFixtureList().m_friction = 0;
-			e.preventDefault();
+			if (keypressed == 0) {
+				prota.nodo.setAnimation("walkr");
+				prota.body.ApplyImpulse(new b2Vec2(150, 0), prota.body.GetWorldCenter());
+				prota.body.GetFixtureList().m_friction = 0;
+				e.preventDefault();
+				keypressed = 1;
+			}
 		}
 		if (e.keyCode == 37) {
-			prota.nodo.setAnimation("walkl");
-			prota.body.ApplyImpulse(new b2Vec2(-2,0), prota.body.GetWorldCenter());
-			prota.body.GetFixtureList().m_friction = 0;
-			e.preventDefault();
+			if (keypressed == 0) {
+				prota.nodo.setAnimation("walkl");
+				prota.body.ApplyImpulse(new b2Vec2(-150, 0), prota.body.GetWorldCenter());
+				prota.body.GetFixtureList().m_friction = 0;
+				e.preventDefault();
+				keypressed = 1;
+			}
 		}
 
 	});
 	$(document).keyup(function(e) {
 		if (e.keyCode == 39) {
 			prota.nodo.setAnimation("idler");
-			prota.body.GetFixtureList().m_friction = 100;
+			prota.body.ApplyImpulse(new b2Vec2(-150, 0), prota.body.GetWorldCenter());
 			e.preventDefault();
+			keypressed = 0;
 		}
 		if (e.keyCode == 37) {
 			prota.nodo.setAnimation("idlel");
-			prota.body.GetFixtureList().m_friction = 100;
+			prota.body.ApplyImpulse(new b2Vec2(150, 0), prota.body.GetWorldCenter());
 			e.preventDefault();
+			keypressed = 0;
 		}
 
 	});
