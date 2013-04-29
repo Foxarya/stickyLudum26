@@ -146,7 +146,7 @@ function logicaJuego() {
 
 	//prota.nodo.setId("#prota");
 
-	//capa.add(prota.nodo);
+	capa.add(prota.nodo);
 
 	prota.body = world.CreateBody(prota.bodyDef);
 	prota.body.CreateFixture(prota.fixDef);
@@ -155,14 +155,12 @@ function logicaJuego() {
 
 	$(document).keydown(function(e) {
 		if (e.keyCode == 39) {
-			moviendo = true;
 			prota.nodo.setAnimation("walkr");
 			prota.body.ApplyForce(new b2Vec2(99,0), prota.body.GetWorldCenter());
 			prota.body.SetFriction(1);
 			e.preventDefault();
 		}
 		if (e.keyCode == 37) {
-			moviendo = true;
 			prota.nodo.setAnimation("walkl");
 			prota.body.ApplyForce(new b2Vec2(-99,0), prota.body.GetWorldCenter());
 			prota.body.SetFriction(1);
@@ -172,21 +170,11 @@ function logicaJuego() {
 	});
 	$(document).keyup(function(e) {
 		if (e.keyCode == 39) {
-			prota.nodo.transitionTo({
-				x : prota.nodo.getX() + 5,
-				duration : 0.1,
-				easing : 'ease-out'
-			});
 			prota.nodo.setAnimation("idler");
 			prota.body.SetFriction(1);
 			e.preventDefault();
 		}
 		if (e.keyCode == 37) {
-			prota.nodo.transitionTo({
-				x : prota.nodo.getX() - 5,
-				duration : 0.1,
-				easing : 'ease-out'
-			});
 			prota.nodo.setAnimation("idlel");
 			prota.body.SetFriction(1);
 			e.preventDefault();

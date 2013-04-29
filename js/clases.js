@@ -78,8 +78,6 @@ function Personaje(x, y, imagen) {
 		index : 0
 	});
 	
-	capa.add(this.nodo);
-
 	this.nodo.setOffset(this.nodo.getWidth() / 2, this.nodo.getHeight() / 2);
 	
 	var pos = this.nodo.getAbsolutePosition();
@@ -105,6 +103,3 @@ function Personaje(x, y, imagen) {
 
 }
 
-Personaje.prototype.valueOf = function() {
-	return this.nodo;
-}
