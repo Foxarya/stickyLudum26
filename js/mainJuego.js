@@ -19,7 +19,6 @@ $(document).ready(function() {
 
 	escenario.add(capa);
 	cargarImagenes();
-
 });
 
 function cargarImagenes() {
@@ -60,7 +59,7 @@ function cargarImagenes() {
 						barraCarga.destroy();
 						initBox2d();
 						logicaJuego();
-						dibujarMapa();
+						//dibujarMapa();
 						tickFisicas.start();
 					}
 				};
@@ -71,39 +70,40 @@ function cargarImagenes() {
 	});
 
 }
-/*
-function cargarPuntos() {
-	$.ajax({
-		type : "GET",
-		url : "maps.xml",
-		dataType : "xml",
-		success : function(xml) {
-			var i = 0;
-			var numeroLineas = $(xml).find('linea').length;
-			var numeroPuntos = $(xml).find('vertice').length;
-			$(xml).find('linea').each(function() {
-				var j = 0;
-				$(xml).find('vertice').each(function() {
-					var str = $(this).text();
-					var x = str.subString(0,str.indexOf(','));
-					var y =  str.subString(str.indexOf(','),str.length);
-					puntosDestino[i][j]	= {x: x.parseInt(), y: y.parseInt()};
-					j++;
-				});
-				i++;
-			});
-		}
-	});
-}
 
-*/
+/*
+ function cargarPuntos() {
+ $.ajax({
+ type : "GET",
+ url : "maps.xml",
+ dataType : "xml",
+ success : function(xml) {
+ var i = 0;
+ var numeroLineas = $(xml).find('linea').length;
+ var numeroPuntos = $(xml).find('vertice').length;
+ $(xml).find('linea').each(function() {
+ var j = 0;
+ $(xml).find('vertice').each(function() {
+ var str = $(this).text();
+ var x = str.subString(0,str.indexOf(','));
+ var y =  str.subString(str.indexOf(','),str.length);
+ puntosDestino[i][j]	= {x: x.parseInt(), y: y.parseInt()};
+ j++;
+ });
+ i++;
+ });
+ }
+ });
+ }
+
+ */
 function initBox2d() {
 
 	// Define the world
 	world = new b2World(new b2Vec2(0, 10)//gravity of 10 in downward y direction
 	, true //allows objects to sleep if they are in equilibrium, indicated by change of color from Red to Grey in debugDraw mode
 	);
-	
+
 	// The native function that draws the object for us to debug their physics and visualize interaction
 	if (debugging) {
 		var debugDraw = new b2DebugDraw();
@@ -168,6 +168,13 @@ function initBox2d() {
 		// This is called after we are done with time steps to clear the forces
 		world.ClearForces();
 
+		// Camera control
+		/*
+		if (escenario.getX() + (escenario.getWidth() - 200) / 2 > prota.body.GetPosition().x * scale)
+			//alert("izquierda");
+			moveCamera(prota.body.GetPosition().x * scale, prota.body.GetPosition().y * scale);
+		if (escenario.getX() + escenario.getWidth() - (escenario.getWidth() - 200) / 2 < prota.body.GetPosition().x * scale)
+			alert("derecha");*/
 		// Traverse through all the box2d objects and update the positions and rotations of corresponding KineticJS objects
 		for (var i = 0; i < nodos.length; i++) {
 			var body = nodos[i].body;
@@ -188,14 +195,13 @@ function initBox2d() {
 		}
 
 	}, capa);
-	
 
 }
 
 function logicaJuego() {
 	var keypressed = false;
 	var impulso = 150;
-	prota = new Personaje(90, 310, dictImg['Sticky']);
+	prota = new Personaje(escenario.getWidth() / 2, 310, dictImg['Sticky']);
 
 	//prota.nodo.setId("#prota");
 
@@ -218,6 +224,8 @@ function logicaJuego() {
 				prota.direction = 1;
 				prota.movement = true;
 			}
+			if (escenario.getX() + escenario.getWidth() - (escenario.getWidth() - 200) / 2 < prota.body.GetPosition().x * scale)
+				escenario.setX(escenario.getX() - 5);
 		} else if (e.keyCode == 37) {
 			if (!keypressed) {
 				prota.nodo.setAnimation("walkl");
@@ -228,6 +236,11 @@ function logicaJuego() {
 				prota.direction = 0;
 				prota.movement = true;
 			}
+			if (escenario.getX() + (escenario.getWidth() - 200) / 2 > prota.body.GetPosition().x * scale)
+			//alert("izquierda");
+				//escenario.setX(-((prota.body.GetPosition().x * scale) - (escenario.getWidth() - 200)));
+				escenario.setX(escenario.getX() + 5);
+
 		}
 		if (e.keyCode == 32) {
 			if ((!prota.jump) && prota.grounded) {
@@ -272,4 +285,18 @@ function logicaJuego() {
 
 	prota.nodo.start();
 
+}
+function moveTransition(newx,newy){
+	escenario.transitionTo({
+	x : -10,
+	y : 0,
+	duration : 3,
+	easing : 'ease-in-out'
+});
+
+}
+function moveCamera(newx, newy) {
+
+	 escenario.setPosition(-newx / 2,-newy / 2);
+	//capa.draw();
 }
