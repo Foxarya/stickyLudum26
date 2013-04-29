@@ -171,13 +171,16 @@ function initBox2d() {
 		world.ClearForces();
 
 		// Camera control
-		
-		if ( (escenario.getWidth() - 200) / 2 - escenario.getX() > prota.body.GetPosition().x * scale)			
+
+		if ((escenario.getWidth() - 200) / 2 - escenario.getX() > prota.body.GetPosition().x * scale)
 			escenario.setX(escenario.getX() + 4);
-			//moveTransition(escenario.getX() + 4,0);
 		if (escenario.getWidth() - escenario.getX() - (escenario.getWidth() - 200) / 2 < prota.body.GetPosition().x * scale)
 			escenario.setX(escenario.getX() - 4);
-			
+		if ((escenario.getHeight() - 200) / 2 - escenario.getY() > prota.body.GetPosition().y * scale)
+			escenario.setY(escenario.getY() + 4);
+		if (escenario.getHeight() - escenario.getY() - (escenario.getHeight() - 200) / 2 < prota.body.GetPosition().y * scale)
+			escenario.setY(escenario.getY() - 4);
+
 		// Traverse through all the box2d objects and update the positions and rotations of corresponding KineticJS objects
 		for (var i = 0; i < nodos.length; i++) {
 			var body = nodos[i].body;
