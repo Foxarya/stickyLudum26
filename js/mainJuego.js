@@ -3,8 +3,7 @@ var dictImg = {};
 var escenario = new Kinetic.Stage({
 	container : 'container',
 	width : 900,
-	height : 575,
-	draggable : true
+	height : 575
 });
 
 var text;
@@ -207,7 +206,7 @@ function initBox2d() {
 function logicaJuego() {
 	var keypressed = false;
 	var impulso = 150;
-	prota = new Personaje(escenario.getWidth() / 2, 310, dictImg['Sticky']);
+	prota = new Personaje(100, 310, dictImg['Sticky']);
 
 	text = new Kinetic.Text({
 		x : 10 / 2,

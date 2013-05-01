@@ -19,6 +19,8 @@ var vertices = [];
 var contador = 0;
 var moviendo = false;
 
+var capaDibujado = new Kinetic.Layer();
+
 var linea;
 
 function calcularDistancia(a, b) {
@@ -67,8 +69,8 @@ function dibujaTodo(elemento) {
 					draggable : true
 				});
 				contador++;
-				capa.add(nuevoVertice);
-				//capa.draw();
+				capaDibujado.add(nuevoVertice);
+				//capaDibujado.draw();
 				vertices.push(nuevoVertice);
 				dibujaTodo(nuevoVertice);
 			}
@@ -77,14 +79,14 @@ function dibujaTodo(elemento) {
 }
 
 function dibujaParcial(elemento) {
-
+	
 	moviendo = true;
 	var moviendoA = false, moviendoB = false;
 
 	if (contador + 1 < puntosDestino.length) {
 		moviendoA = true;
 
-		var vertice = verticeIndice(contador + 1);
+		var vertice = vertices[verticeIndice(contador + 1)];
 
 		if (vertice == null) {
 			vertice = new Kinetic.Circle({
@@ -97,14 +99,14 @@ function dibujaParcial(elemento) {
 				strokeWidth : 4
 			});
 
-			capa.add(nuevoVertice);
-			vertices.push(nuevoVertice);
+			capaDibujado.add(vertice);
+			vertices.push(vertice);
 
 			var distancia = calcularDistancia(vertice, puntosDestino[contador + 1]);
 			var velocidad = 200;
 			var tiempo = distancia / velocidad;
 
-			nuevoVertice.transitionTo({
+			vertice.transitionTo({
 				x : puntosDestino[contador + 1].x,
 				y : puntosDestino[contador + 1].y,
 				duration : tiempo,
@@ -120,25 +122,67 @@ function dibujaParcial(elemento) {
 
 	if (elemento.indice - 1 >= 0) {
 		moviendoB = true;
-		var anterior = vertices[elemento.indice - 1];
-		var distancia = calcularDistancia(anterior, puntosDestino[contador]);
-		var velocidad = 200;
-		var tiempo = distancia / velocidad;
 
-		anterior.transitionTo({
-			x : puntosDestino[contador].x,
-			y : puntosDestino[contador].y,
-			duration : tiempo,
-			easing : 'ease-in-out',
-			callback : function() {
-				anterior.destroy();
-				vertices.splice(elemento.indice - 1, 1);
-				capa.draw();
-				moviendoB = false;
-				moviendo = (!moviendoA && !moviendoB) ? false : true;
+		var vertice = vertices[verticeIndice(contador - 1)];
 
-			}
-		});
+		if (vertice == null) {
+			vertice = new Kinetic.Circle({
+				x : elemento.nodo.getX(),
+				y : elemento.nodo.getY(),
+				radius : 10,
+				opacity : debugging,
+				fill : 'red',
+				stroke : 'black',
+				strokeWidth : 4
+			});
+
+			capaDibujado.add(vertice);
+			vertices.push(vertice);
+
+			var distancia = calcularDistancia(vertice, puntosDestino[contador - 1]);
+			var velocidad = 200;
+			var tiempo = distancia / velocidad;
+
+			vertice.transitionTo({
+				x : puntosDestino[contador - 1].x,
+				y : puntosDestino[contador - 1].y,
+				duration : tiempo,
+				easing : 'ease-in-out',
+				callback : function() {
+					moviendoA = false;
+					moviendo = (!moviendoA && !moviendoB) ? false : true;
+
+				}
+			});
+		}
+	}
+	
+	for(var i = 0; i < puntosDestino.length - 1;i++)
+	{
+		if(i >= contador - 1 && i <= contador + 1)
+			continue;
+			
+		var dondeAvanzo = (i < contador) ? i + 1 : i - 1;
+		
+		var vertice = vertices[verticeIndice(i)];
+		
+		if (typeof vertice != "undefined") {
+			
+			var distancia = calcularDistancia(vertice, puntosDestino[dondeAvanzo]);
+			var velocidad = 200;
+			var tiempo = distancia / velocidad;
+
+			vertice.transitionTo({
+				x : puntosDestino[dondeAvanzo].x,
+				y : puntosDestino[dondeAvanzo].y,
+				duration : tiempo,
+				easing : 'ease-in-out',
+				callback : function() {
+					vertices.splice(verticeIndice(indiceVertice(this)), 1);
+					this.destroy();
+				}
+			});
+		}
 	}
 
 }
@@ -155,13 +199,15 @@ function indiceVertice(vertice) {
 function verticeIndice(indice) {
 	for (var i = 0; i < vertices.length; i++) {
 		if (vertices[i].getX() == puntosDestino[indice].x && vertices[i].getY() == puntosDestino[indice].y) {
-			return vertices[i];
+			return i;
 		}
 	}
 	return null;
 }
 
 function dibujarMapa() {
+	
+	escenario.add(capaDibujado);
 
 	var primerVertice = new Kinetic.Circle({
 		x : puntosDestino[0].x,
@@ -186,10 +232,8 @@ function dibujarMapa() {
 
 	vertices.push(primerVertice);
 
-	capa.add(linea);
-	capa.add(primerVertice);
-
-	escenario.add(capa);
+	capaDibujado.add(linea);
+	capaDibujado.add(primerVertice);
 
 	var verticePasado = 0;
 	tickDibujo = new Kinetic.Animation(function() {
@@ -215,7 +259,7 @@ function dibujarMapa() {
 
 				distancias.push({
 					distancia : distancia,
-					indice : i
+					indice : indiceVertice(vertices[i])
 				});
 
 			}
@@ -246,25 +290,25 @@ function dibujarMapa() {
 			 });
 
 			 contador++;
-			 capa.add(nuevoVertice);
-			 capa.draw();
+			 capaDibujado.add(nuevoVertice);
+			 capaDibujado.draw();
 			 vertices.push(nuevoVertice);
 			 dibujaParcial(nuevoVertice);
 			 }*/
 
-			if (masCercano.distancia < 100 && verticePasado != masCercano.indice) {
+			if (masCercano.distancia < 100 && !moviendo && verticePasado != masCercano.indice) {
 
 				verticePasado = masCercano.indice;
-				contador = indiceVertice(vertices[masCercano.indice]);
+				contador = masCercano.indice;
 				dibujaParcial({
-					nodo : vertices[masCercano.indice],
+					nodo : vertices[verticeIndice(masCercano.indice)],
 					indice : masCercano.indice
 				});
 
 			}
 		}
 
-	}, capa);
+	}, capaDibujado);
 
 	tickDibujo.start();
 	dibujaParcial({
