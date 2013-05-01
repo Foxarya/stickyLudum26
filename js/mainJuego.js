@@ -61,7 +61,7 @@ function cargarImagenes() {
 						barraCarga.destroy();
 						initBox2d();
 						logicaJuego();
-						//dibujarMapa();
+						dibujarMapa();
 						tickFisicas.start();
 					}
 				};
