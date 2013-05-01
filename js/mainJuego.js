@@ -8,7 +8,7 @@ var escenario = new Kinetic.Stage({
 
 var text;
 
-var debugging = true;
+var debugging = false;
 
 var capa = new Kinetic.Layer();
 
@@ -117,31 +117,28 @@ function initBox2d() {
 		world.SetDebugDraw(debugDraw);
 	}
 
-	// Define the Ground
-	// Basic properties of ground
 	var fixDef = new b2FixtureDef;
 	fixDef.density = 2.0;
 	fixDef.friction = 0;
 	fixDef.restitution = 0;
 
-	// Ground is nothing but just a static rectangular body with its center at screenW/2 and screenH
 	var bodyDef = new b2BodyDef;
 	bodyDef.type = b2Body.b2_staticBody;
-	bodyDef.position.x = escenario.getWidth() / 2 / scale;
-	// We use screenH for y coordinate as the ground has to be at the bottom of our screen
-	bodyDef.position.y = (escenario.getHeight() - 50) / scale;
+	bodyDef.position.x = 100 / scale;
+	bodyDef.position.y = 500 / scale;
 
-	// here we define ground as a rectangular box of width = screenW and height = 10 (just some small number to make a thin strip)
 	fixDef.shape = new b2PolygonShape;
-	fixDef.shape.SetAsBox((escenario.getWidth() / 2 - 10) / scale, 10 / scale);
-
-	// And finally add our ground object to our world
-	world.CreateBody(bodyDef).CreateFixture(fixDef);
+	fixDef.shape.SetAsBox(50 / scale, 10 / scale);
+	
+	var suelo = world.CreateBody(bodyDef);
+	suelo.CreateFixture(fixDef);
 
 	tickFisicas = new Kinetic.Animation(function(frame) {
 		world.Step(1 / frame.frameRate, 3, 3);
 		// timestep, velocityIterations, positionIterations. Read manual for more details
-
+		
+		suelo.SetPosition(new b2Vec2(prota.body.GetPosition().x, puntosDestino[0].y / scale));
+		
 		// Controls for jump
 		prota.stilltime += frame.timeDiff;
 		if ((!prota.grounded) && prota.body.GetLinearVelocity().y > -1) {
@@ -206,7 +203,7 @@ function initBox2d() {
 function logicaJuego() {
 	var keypressed = false;
 	var impulso = 150;
-	prota = new Personaje(100, 310, dictImg['Sticky']);
+	prota = new Personaje(100, 50, dictImg['Sticky']);
 
 	text = new Kinetic.Text({
 		x : 10 / 2,
