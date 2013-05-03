@@ -8,7 +8,7 @@ var escenario = new Kinetic.Stage({
 
 var text;
 
-var debugging = false;
+var debugging = true;
 
 var capa = new Kinetic.Layer();
 
@@ -100,6 +100,7 @@ function cargarImagenes() {
  */
 function initBox2d() {
 
+	var timeCamera = 0;
 	// Define the world
 	world = new b2World(new b2Vec2(0, 10)//gravity of 10 in downward y direction
 	, true //allows objects to sleep if they are in equilibrium, indicated by change of color from Red to Grey in debugDraw mode
@@ -129,16 +130,17 @@ function initBox2d() {
 
 	fixDef.shape = new b2PolygonShape;
 	fixDef.shape.SetAsBox(50 / scale, 10 / scale);
-	
+
 	var suelo = world.CreateBody(bodyDef);
 	suelo.CreateFixture(fixDef);
 
 	tickFisicas = new Kinetic.Animation(function(frame) {
+		timeCamera += frame.timeDiff;
 		world.Step(1 / frame.frameRate, 3, 3);
 		// timestep, velocityIterations, positionIterations. Read manual for more details
-		
+
 		suelo.SetPosition(new b2Vec2(prota.body.GetPosition().x, puntosDestino[0].y / scale));
-		
+
 		// Controls for jump
 		prota.stilltime += frame.timeDiff;
 		if ((!prota.grounded) && prota.body.GetLinearVelocity().y > -1) {
@@ -168,15 +170,28 @@ function initBox2d() {
 
 		// Camera control
 
-		if ((escenario.getWidth() - 200) / 2 - escenario.getX() > prota.body.GetPosition().x * scale)
-			escenario.setX(escenario.getX() + 4);
-		if (escenario.getWidth() - escenario.getX() - (escenario.getWidth() - 200) / 2 < prota.body.GetPosition().x * scale)
-			escenario.setX(escenario.getX() - 4);
-		if ((escenario.getHeight() - 200) / 2 - escenario.getY() > prota.body.GetPosition().y * scale)
-			escenario.setY(escenario.getY() + 4);
-		if (escenario.getHeight() - escenario.getY() - (escenario.getHeight() - 200) / 2 < prota.body.GetPosition().y * scale)
-			escenario.setY(escenario.getY() - 4);
+		if (timeCamera >= 500) {
+			timeCamera = 0;
+			if ((escenario.getWidth() - 200) / 2 - escenario.getX() > prota.body.GetPosition().x * scale)
+				transitionCamera(escenario.getX() + 200, escenario.getY());
+			if (escenario.getWidth() - escenario.getX() - (escenario.getWidth() - 200) / 2 < prota.body.GetPosition().x * scale)
+				transitionCamera(escenario.getX() - 200, escenario.getY());
+			if ((escenario.getHeight() - 200) / 2 - escenario.getY() > prota.body.GetPosition().y * scale)
+				transitionCamera(escenario.getX(), escenario.getY() + 200);
+			if (escenario.getHeight() - escenario.getY() - (escenario.getHeight() - 200) / 2 < prota.body.GetPosition().y * scale)
+				transitionCamera(escenario.getX(), escenario.getY() - 200);
 
+		}
+		/*
+		if ((escenario.getWidth() - 200) / 2 - escenario.getX() > prota.body.GetPosition().x * scale)
+		escenario.setX(escenario.getX() + 4);
+		if (escenario.getWidth() - escenario.getX() - (escenario.getWidth() - 200) / 2 < prota.body.GetPosition().x * scale)
+		escenario.setX(escenario.getX() - 4);
+		if ((escenario.getHeight() - 200) / 2 - escenario.getY() > prota.body.GetPosition().y * scale)
+		escenario.setY(escenario.getY() + 4);
+		if (escenario.getHeight() - escenario.getY() - (escenario.getHeight() - 200) / 2 < prota.body.GetPosition().y * scale)
+		escenario.setY(escenario.getY() - 4);
+		*/
 		// Traverse through all the box2d objects and update the positions and rotations of corresponding KineticJS objects
 		for (var i = 0; i < nodos.length; i++) {
 			var body = nodos[i].body;
@@ -290,4 +305,13 @@ function logicaJuego() {
 
 	prota.nodo.start();
 
+}
+
+function transitionCamera(newx, newy) {
+	escenario.transitionTo({
+		x : newx,
+		y : newy,
+		duration : 1,
+		//easing: easing-in-out
+	});
 }
