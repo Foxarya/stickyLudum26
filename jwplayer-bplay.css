@@ -244,3 +244,7 @@
   color: #e5322c;
   font-weight: bold;
 }
+
+.jw-tab-focus:focus {
+    outline: none;
+}
