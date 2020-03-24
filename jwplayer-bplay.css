@@ -1,3 +1,6 @@
+*:focus {
+    outline: none;
+}
 /* Set the idle overlay to transparent white */
 .jwplayer.jw-skin-alaska.jw-state-idle .jw-controls {
   background: rgba(255, 255, 255, .7);
